@@ -39,8 +39,8 @@ typedef struct s_game {
 
 void move_player(t_player *player, int dx, int dy)
 {
-	player->x += dx * 5;
-	player->y += dy * 5;
+	player->x += dx * 4;
+	player->y += dy * 4;
 }
 
 void draw_player(void *mlx_ptr, void *win_ptr, t_player *player)
