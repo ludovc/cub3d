@@ -15,6 +15,12 @@
 
 #define ESC_KEY 65307
 
+typedef struct s_player {
+	int x;
+	int y;
+	int color;
+} t_player;
+
 int	close_window()
 {
 	exit(0);
@@ -29,13 +35,24 @@ int handle_key(int keycode, void *param)
     return (0);
 }
 
+void draw_player(void *mlx_ptr, void *win_ptr, t_player *player)
+{
+    mlx_pixel_put(mlx_ptr, win_ptr, player->x, player->y, player->color);
+}
+
 int	main()
 {
 	void	*mlx;
 	void	*mlx_win;
+	t_player player;
 
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 500, 500, "titolo");
+	player.x = 100;
+	player.y = 100;
+	player.color = 0xFFFFFF;
+	draw_player(mlx, mlx_win, &player);
+
 	mlx_hook(mlx_win, 17, 0, close_window, NULL);
 	mlx_hook(mlx_win, 2, 1, handle_key, NULL);
 	mlx_loop(mlx);
