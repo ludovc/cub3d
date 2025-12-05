@@ -17,10 +17,10 @@ int	main()
 	t_game game;
 
 	game.mlx = mlx_init();
-	game.win = mlx_new_window(game.mlx, 500, 500, "Cub3D - Move with arrows");
+	game.win = mlx_new_window(game.mlx, WIDTH, HEIGHT, "CUB3D");
 	game.player.x = 100;
 	game.player.y = 100;
-	game.player.color = 0x39FF14;
+	game.player.color = GREEN;
 	
 	draw_player(game.mlx, game.win, &game.player);
 

@@ -7,6 +7,13 @@
 #define S_KEY 115
 #define D_KEY 100
 
+#define WIDTH 300
+#define HEIGHT 200
+
+#define BLACK 0x000000
+#define GREEN 0x39FF14
+
+
 typedef struct s_player {
 	int x;
 	int y;
