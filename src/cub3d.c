@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../inc/cub3d.h"
 
 int	main()
 {
@@ -18,8 +18,8 @@ int	main()
 
 	game.mlx = mlx_init();
 	game.win = mlx_new_window(game.mlx, WIDTH, HEIGHT, "CUB3D");
-	game.player.x = 100;
-	game.player.y = 100;
+	game.player.x = WIDTH / 2;
+	game.player.y = HEIGHT / 2;
 	game.player.color = GREEN;
 	
 	draw_player(game.mlx, game.win, &game.player);

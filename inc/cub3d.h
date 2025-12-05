@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "minilibx/mlx.h"
+#include "../minilibx/mlx.h"
 
 #define ESC_KEY 65307
 #define W_KEY 119
