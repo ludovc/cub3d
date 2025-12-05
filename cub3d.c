@@ -13,6 +13,8 @@
 #include "minilibx/mlx.h"
 #include <stdlib.h>
 
+#define ESC_KEY 65307
+
 int	close_window()
 {
 	exit(0);
@@ -22,7 +24,7 @@ int	close_window()
 int handle_key(int keycode, void *param)
 {
 	(void)param;
-	if (keycode == 65307)
+	if (keycode == ESC_KEY)
 		close_window();
     return (0);
 }
