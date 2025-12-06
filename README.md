@@ -1,0 +1,1 @@
+[![reindirizza a google docs](https://i0.wp.com/media1.giphy.com/media/13ULdHxJYbsDq8/giphy.gif)](https://docs.google.com/document/d/1moshmiv8zIaaNT17Rc2ysmK-XotWL1yTOz7UAF3vHNA/edit?usp=sharing)
