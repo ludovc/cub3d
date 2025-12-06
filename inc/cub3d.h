@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "../minilibx/mlx.h"
+#include "../inc/libft.h"
 
 #define ESC_KEY 65307
 #define W_KEY 119
@@ -20,10 +21,20 @@ typedef struct s_player {
 	int color;
 } t_player;
 
+typedef struct s_dimensions {
+	int width;
+	int height;
+} t_dimensions;
+
+typedef struct s_objects {
+	int fd;
+} t_objects;
+
 typedef struct s_game {
 	void *mlx;
 	void *win;
 	t_player player;
+	char **map;
 } t_game;
 
 // mlx_hook.c
@@ -34,4 +45,18 @@ int handle_key(int keycode, void *param);
 void move_player(t_player *player, int dx, int dy);
 void draw_player(void *mlx_ptr, void *win_ptr, t_player *player);
 void clear_player(void *mlx_ptr, void *win_ptr, t_player *player);
-void update_player(t_game *game, int dx, int dy);   
+void update_player(t_game *game, int dx, int dy);
+
+// cub_parse.c
+int parse(int argc, char *argv[]);
+t_game setup_game(char *scene_file, t_dimensions *d);
+int check_usage_and_file_type(int argc, char *map_file);
+int validate_map_file(char *map_file);
+int check_map_line_lengths(int fd);
+int validate_line_lengths(int fd, size_t line_length);
+
+// Functions referenced but not implemented yet
+int is_playable(char *map_file);
+int check_map_objects(char *map_file);
+t_dimensions get_map_dimensions(char *scene_file);
+char **create_map(char *scene_file);   
