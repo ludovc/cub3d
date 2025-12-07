@@ -1,3 +1,6 @@
+#ifndef CUB3D_H
+# define CUB3D_H
+
 #include <stdlib.h>
 #include "../minilibx/mlx.h"
 #include "../inc/libft.h"
@@ -59,4 +62,6 @@ int validate_line_lengths(int fd, size_t line_length);
 int is_playable(char *map_file);
 int check_map_objects(char *map_file);
 t_dimensions get_map_dimensions(char *scene_file);
-char **create_map(char *scene_file);   
+char **create_map(char *scene_file);
+
+#endif
