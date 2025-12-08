@@ -38,6 +38,7 @@ typedef struct s_game {
 	void *win;
 	t_player player;
 	char **map;
+	char **scene;
 } t_game;
 
 // mlx_hook.c
@@ -63,5 +64,9 @@ int is_playable(char *map_file);
 int check_map_objects(char *map_file);
 t_dimensions get_map_dimensions(char *scene_file);
 char **create_map(char *scene_file);
+
+char	**get_file(char *path);
+void	print_strarr(char **arr);
+void	split_file(char **arr, char ***settings, char ***map);
 
 #endif

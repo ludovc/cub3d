@@ -12,9 +12,28 @@
 
 #include "../inc/cub3d.h"
 
+char	**get_map(char *path);
+
+void	parsing()
+{
+	char	**settings;
+	char	**map;
+	char	**file;
+
+	file = get_file("./maps/scene1.cub");
+	split_file(file, &settings, &map);
+	printf("---------\n");
+	print_strarr(settings);
+	printf("---------\n");
+	print_strarr(map);
+	printf("---------\n");
+}
+
 int	main()
 {
 	t_game game;
+
+	parsing();
 
 	game.mlx = mlx_init();
 	game.win = mlx_new_window(game.mlx, WIDTH, HEIGHT, "CUB3D");
