@@ -14,6 +14,15 @@
 
 char	**get_map(char *path);
 
+void	print_splitted_file(char **settings, char **map)
+{
+	printf("---------\n");
+	print_strarr(settings);
+	printf("---------\n");
+	print_strarr(map);
+	printf("---------\n");
+}
+
 void	parsing()
 {
 	char	**settings;
@@ -22,11 +31,7 @@ void	parsing()
 
 	file = get_file("./maps/scene1.cub");
 	split_file(file, &settings, &map);
-	printf("---------\n");
-	print_strarr(settings);
-	printf("---------\n");
-	print_strarr(map);
-	printf("---------\n");
+	print_splitted_file(settings, map);
 }
 
 int	main()
