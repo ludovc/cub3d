@@ -28,10 +28,17 @@ void	parsing()
 	char	**settings;
 	char	**map;
 	char	**file;
+	t_settings	*a;
 
 	file = get_file("./maps/scene1.cub");
 	split_file(file, &settings, &map);
-	print_splitted_file(settings, map);
+	// print_splitted_file(settings, map);
+	a = extract_settings(settings);
+	printf("%p\n", a);
+	print_strarr(settings);
+	// print_settings(a);
+	// check_settings();
+	// check_leftovers();
 }
 
 int	main()

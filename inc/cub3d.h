@@ -41,6 +41,16 @@ typedef struct s_game {
 	char **scene;
 } t_game;
 
+typedef struct s_settings
+{
+	char	*no;
+	char	*so;
+	char	*we;
+	char	*ea;
+	char	*f;
+	char	*c;
+}	t_settings;
+
 // mlx_hook.c
 int	close_window();
 int handle_key(int keycode, void *param);
@@ -69,5 +79,8 @@ char	**get_file(char *path);
 void	print_strarr(char **arr);
 void	split_file(char **arr, char ***settings, char ***map);
 #include "../src/strarr/strarr.h"
+
+// extract_settings.c
+t_settings	*extract_settings(char **settings);
 
 #endif
