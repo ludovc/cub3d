@@ -58,7 +58,7 @@ MLX = minilibx/libmlx.a
 LIBFT = libft/libft.a
 
 # Automatic source file discovery
-SRCS = $(wildcard $(SRCDIR)/*.c)
+SRCS = $(wildcard $(SRCDIR)/*.c $(SRCDIR)/strarr/*.c)
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 # Output colors
@@ -122,13 +122,11 @@ $(NAME): $(OBJS)
 
 # REGOLE DI COMPILAZIONE
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(dir $@)
 	@printf "\r\033[K$(CYAN)Compiling: $(GREEN)$<$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@printf "\r\033[K$(GREEN)✓ Compiled: $<$(RESET)\n"
-
-$(OBJDIR):
-	@mkdir -p $(OBJDIR)
 
 
 # GESTIONE DIPENDENZE

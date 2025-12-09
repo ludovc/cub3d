@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "strarr.h"
 
 char	**strarr_expand(char **arr)
 {

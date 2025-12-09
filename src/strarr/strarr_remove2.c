@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "strarr.h"
 
-int	strarr_find_unset(char **arr, char *str)
+int	strarr_find_var(char **arr, char *var)
 {
 	int		i;
 	char	**str_parts;
@@ -20,8 +20,8 @@ int	strarr_find_unset(char **arr, char *str)
 	i = 0;
 	while (arr[i])
 	{
-		str_parts = ft_split(arr[i], '=');
-		if (ft_strcmp(str_parts[0], str) == 0)
+		str_parts = ft_split(arr[i], ' ');
+		if (ft_strcmp(str_parts[0], var) == 0)
 		{
 			free_strarr(str_parts);
 			return (i);
@@ -32,11 +32,11 @@ int	strarr_find_unset(char **arr, char *str)
 	return (-1);
 }
 
-void	strarr_remove_for_unset(char **arr, char *str)
+void	strarr_remove_var(char **arr, char *var)
 {
 	int		index;
 
-	index = strarr_find_unset(arr, str);
+	index = strarr_find_var(arr, var);
 	if (index >= 0)
 	{
 		strarr_remove_index(arr, index);

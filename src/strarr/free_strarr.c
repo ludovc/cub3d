@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
+#include "strarr.h"
 
 void	free_strarr(char **strarr)
 {

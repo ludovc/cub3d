@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "strarr.h"
 
 void	strarr_shift(char **arr, int start, int size)
 {

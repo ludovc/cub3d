@@ -34,18 +34,6 @@ int	is_map(char *str)
 		return (0);
 }
 
-int	arr_size(char **arr)
-{
-	int		i;
-
-	i = 0;
-	while (arr[i])
-	{
-		i++;
-	}
-	return (i);
-}
-
 int	arr_size_settings(char **arr)
 {
 	int		i;
@@ -56,24 +44,6 @@ int	arr_size_settings(char **arr)
 		i++;
 	}
 	return (i);
-}
-
-char	**strarr_dup(char **arr)
-{
-	int		i;
-	int		size;
-	char	**res;
-
-	size = arr_size(arr);
-	res = malloc(sizeof(char *) * (size + 1));
-	i = 0;
-	while (i < size)
-	{
-		res[i] = ft_strdup(arr[i]);
-		i++;
-	}
-	res[i] = NULL;
-	return (res);
 }
 
 void	split_file(char **arr, char ***settings, char ***map)

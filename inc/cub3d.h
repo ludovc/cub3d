@@ -68,5 +68,6 @@ char **create_map(char *scene_file);
 char	**get_file(char *path);
 void	print_strarr(char **arr);
 void	split_file(char **arr, char ***settings, char ***map);
+#include "../src/strarr/strarr.h"
 
 #endif
