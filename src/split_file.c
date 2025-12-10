@@ -39,7 +39,7 @@ int	arr_size_settings(char **arr)
 	int		i;
 
 	i = 0;
-	while (!is_map(arr[i]))
+	while (arr[i] && !is_map(arr[i]))
 	{
 		i++;
 	}
