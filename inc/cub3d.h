@@ -33,14 +33,6 @@ typedef struct s_objects {
 	int fd;
 } t_objects;
 
-typedef struct s_game {
-	void *mlx;
-	void *win;
-	t_player player;
-	char **map;
-	char **scene;
-} t_game;
-
 typedef struct s_settings
 {
 	char	*no;
@@ -50,6 +42,15 @@ typedef struct s_settings
 	char	*f;
 	char	*c;
 }	t_settings;
+
+typedef struct s_game {
+	void *mlx;
+	void *win;
+	t_player player;
+	char **map;
+	char **scene;
+	t_settings	*settings;
+} t_game;
 
 // mlx_hook.c
 int	close_window();
@@ -88,5 +89,7 @@ int	validate_map(char **map);
 int map_row_len(const char *row);
 int is_valid_tile(char c);
 int is_spawn(char c);
+
+void	free_settings(t_settings *a);
 
 #endif

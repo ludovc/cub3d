@@ -23,47 +23,54 @@ void	print_splitted_file(char **settings, char **map)
 	printf("---------\n");
 }
 
-void	parsing()
+void	parsing(t_game *game)
 {
 	char	**settings;
 	char	**map;
 	char	**file;
-	t_settings	*a;
 
 	file = get_file("./maps/scene1.cub");
 	split_file(file, &settings, &map);
+	free_strarr(file);
 	// print_splitted_file(settings, map);
-	a = extract_settings(settings);
-	printf("%p\n", a);
-	print_strarr(settings);
+	game->settings = extract_settings(settings);
+	printf("%p\n", game->settings);
 	// print_settings(a);
 	// check_settings();
 	// check_leftovers();
+	free_strarr(settings);
 
-	if (validate_map(map))
-	{
-		ft_printf("MAPPA INVALIDA\n");
-		// controlla i free ed esci
-		exit(1);
-	}
-	ft_printf("MAPPA BUONA\n");
+	// if (validate_map(map))
+	// {
+	// 	ft_printf("MAPPA INVALIDA\n");
+	// 	// controlla i free ed esci
+	// 	exit(1);
+	// }
+	// ft_printf("MAPPA BUONA\n");
+	free_strarr(map);
+}
+
+void	free_all(t_game *game)
+{
+	free_settings(game->settings);
 }
 
 int	main()
 {
 	t_game game;
 
-	parsing();
+	parsing(&game);
 
-	game.mlx = mlx_init();
-	game.win = mlx_new_window(game.mlx, WIDTH, HEIGHT, "CUB3D");
-	game.player.x = WIDTH / 2;
-	game.player.y = HEIGHT / 2;
-	game.player.color = GREEN;
+	// game.mlx = mlx_init();
+	// game.win = mlx_new_window(game.mlx, WIDTH, HEIGHT, "CUB3D");
+	// game.player.x = WIDTH / 2;
+	// game.player.y = HEIGHT / 2;
+	// game.player.color = GREEN;
 	
-	draw_player(game.mlx, game.win, &game.player);
+	// draw_player(game.mlx, game.win, &game.player);
 
-	mlx_hook(game.win, 17, 0, close_window, NULL);
-	mlx_hook(game.win, 2, 1, handle_key, &game);
-	mlx_loop(game.mlx);
+	// mlx_hook(game.win, 17, 0, close_window, NULL);
+	// mlx_hook(game.win, 2, 1, handle_key, &game);
+	// mlx_loop(game.mlx);
+	free_all(&game);
 }
