@@ -86,7 +86,6 @@ t_settings	*extract_settings(char **settings);
 
 // parse map
 int	validate_map(char **map);
-int map_row_len(const char *row);
 int is_valid_tile(char c);
 int is_spawn(char c);
 

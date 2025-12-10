@@ -21,7 +21,7 @@ int	strarr_find_var(char **arr, char *var)
 	while (arr[i])
 	{
 		str_parts = ft_split(arr[i], ' ');
-		if (ft_strcmp(str_parts[0], var) == 0)
+		if (str_parts[0] && ft_strcmp(str_parts[0], var) == 0)
 		{
 			free_strarr(str_parts);
 			return (i);

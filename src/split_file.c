@@ -7,7 +7,7 @@ void	print_strarr(char **arr)
 	i = 0;
 	while (arr[i])
 	{
-		ft_printf("%s", arr[i]);
+		ft_printf("%s\n", arr[i]);
 		i++;
 	}
 }

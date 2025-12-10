@@ -56,35 +56,47 @@ int	ensure_newline(char **map)
 	return (0);
 }
 
+void	remove_newline(char *str)
+{
+	char	*newline_point;
+
+	if (!str)
+		return ;
+	newline_point = ft_strchr(str, '\n');
+	if (newline_point)
+		*newline_point = '\0';
+}
+
 // carica il file in un array di stringhe
 char	**get_file(char *path)
 {
-	char	**map;
+	char	**file;
 	char	*row;
-	int		r;
+	int		number_row;
 	int		i;
 	int		fd;
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
 		return (NULL);
-	r = get_r(path);
-	map = (char **) malloc((r + 1) * sizeof(char *));
-	if (!map)
+	number_row = get_r(path);
+	file = (char **) malloc((number_row + 1) * sizeof(char *));
+	if (!file)
 		return (NULL);
 	i = 0;
-	while (i < r)
+	while (i < number_row)
 	{
 		row = ft_get_next_line(fd);
-		map[i] = row;
+		remove_newline(row);
+		file[i] = row;
 		i++;
 	}
-	map[i] = NULL;
+	file[i] = NULL;
 	close(fd);
-	if (ensure_newline(map) == 1)
+	if (ensure_newline(file) == 1)
 	{
-		free(map);
-		map = NULL;
+		free(file);
+		file = NULL;
 	}
-	return (map);
+	return (file);
 }

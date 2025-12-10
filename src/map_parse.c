@@ -17,7 +17,7 @@ static int	validate_map_chars(char **map, int *spawn_count)
 	has_errors = 0;
 	while (map && map[y])
 	{
-		row_len = map_row_len(map[y]);
+		row_len = ft_strlen(map[y]);
 		x = 0;
 		while (x < row_len)
 		{
@@ -44,7 +44,7 @@ static char	map_at(char **map, int y, int x)
 		return (' ');
 	if (!map || !map[y])
 		return (' ');
-	row_len = map_row_len(map[y]);
+	row_len = ft_strlen(map[y]);
 	if (x >= row_len)
 		return (' ');
 	return (map[y][x]);
@@ -75,7 +75,7 @@ static int	validate_map_closed(char **map)
 	has_errors = 0;
 	while (map && map[y])
 	{
-		row_len = map_row_len(map[y]);
+		row_len = ft_strlen(map[y]);
 		x = 0;
 		while (x < row_len)
 		{

@@ -30,6 +30,7 @@ void	parsing(t_game *game)
 	char	**file;
 
 	file = get_file("./maps/scene1.cub");
+	print_strarr(file);
 	split_file(file, &settings, &map);
 	free_strarr(file);
 	// print_splitted_file(settings, map);

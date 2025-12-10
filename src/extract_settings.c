@@ -45,7 +45,7 @@ char	*strarr_find_varcontent(char **arr, char *var_name)
 	while (arr[i])
 	{
 		str_parts = ft_split(arr[i], ' ');
-		if (ft_strcmp(str_parts[0], var_name) == 0)
+		if (str_parts[0] && ft_strcmp(str_parts[0], var_name) == 0)
 		{
 			if (str_parts[1] == NULL)
 				res = ft_strdup("");
