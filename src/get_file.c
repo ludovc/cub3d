@@ -32,30 +32,6 @@ int	get_r(char *path)
 	return (res);
 }
 
-int	ensure_newline(char **map)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	if (map && !map[i])
-		return (1);
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (!map[i + 1] && map[i][j + 1] == '\0' && map[i][j] != '\n')
-			{
-				map[i] = ft_strjoin_fs1(map[i], "\n");
-			}
-			j++;
-		}
-		i++;
-	}
-	return (0);
-}
-
 void	remove_newline(char *str)
 {
 	char	*newline_point;
@@ -93,10 +69,5 @@ char	**get_file(char *path)
 	}
 	file[i] = NULL;
 	close(fd);
-	if (ensure_newline(file) == 1)
-	{
-		free(file);
-		file = NULL;
-	}
 	return (file);
 }
