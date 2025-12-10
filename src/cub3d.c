@@ -40,13 +40,10 @@ void	parsing(t_game *game)
 	// check_leftovers();
 	free_strarr(settings);
 
-	// if (validate_map(map))
-	// {
-	// 	ft_printf("MAPPA INVALIDA\n");
-	// 	// controlla i free ed esci
-	// 	exit(1);
-	// }
-	// ft_printf("MAPPA BUONA\n");
+	if (validate_map(map))
+		ft_printf("MAPPA INVALIDA\n");
+	else
+		ft_printf("MAPPA BUONA\n");
 	free_strarr(map);
 }
 
