@@ -33,10 +33,11 @@ void	parsing(t_game *game)
 	print_strarr(file);
 	split_file(file, &settings, &map);
 	free_strarr(file);
-	// print_splitted_file(settings, map);
 	game->settings = extract_settings(settings);
-	printf("%p\n", game->settings);
-	// print_settings(a);
+	if (!game->settings)
+	{
+		ft_printf("Settings invalide\n");
+	}
 	// check_settings();
 	// check_leftovers();
 	free_strarr(settings);

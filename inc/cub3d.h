@@ -90,5 +90,6 @@ int is_valid_tile(char c);
 int is_spawn(char c);
 
 void	free_settings(t_settings *a);
+void	print_settings(t_settings *a);
 
 #endif
