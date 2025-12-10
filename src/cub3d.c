@@ -39,6 +39,14 @@ void	parsing()
 	// print_settings(a);
 	// check_settings();
 	// check_leftovers();
+
+	if (validate_map(map))
+	{
+		ft_printf("MAPPA INVALIDA\n");
+		// controlla i free ed esci
+		exit(1);
+	}
+	ft_printf("MAPPA BUONA\n");
 }
 
 int	main()
