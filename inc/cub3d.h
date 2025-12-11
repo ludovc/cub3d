@@ -92,4 +92,7 @@ int is_spawn(char c);
 void	free_settings(t_settings *a);
 void	print_settings(t_settings *a);
 
+// check_settings.c
+int	check_settings(t_settings *settings);
+
 #endif
