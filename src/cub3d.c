@@ -38,7 +38,7 @@ void	parsing(t_game *game)
 	{
 		ft_printf("Settings invalide\n");
 	}
-	if (check_settings(game->settings) == 0)
+	else if (check_settings(game->settings) == 0)
 		ft_printf("Settings invalide\n");
 	// check_leftovers();
 	free_strarr(settings);
@@ -52,7 +52,8 @@ void	parsing(t_game *game)
 
 void	free_all(t_game *game)
 {
-	free_settings(game->settings);
+	if (game->settings)
+		free_settings(game->settings);
 }
 
 int	main()
