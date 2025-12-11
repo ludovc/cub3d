@@ -1,7 +1,7 @@
-NO ./path_to_the_north_texture
-SO ./path_to_the_south_texture
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+NO xpm/big-grid-cyan.xpm
+SO xpm/big-grid-cyan.xpm
+WE xpm/big-grid-cyan.xpm
+EA xpm/big-grid-cyan.xpm
 
 F 220,100,0
 C 225,30,0
