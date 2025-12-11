@@ -12,7 +12,7 @@
 
 #include "strarr.h"
 
-int	arr_size(char **arr)
+int	strarr_len(char **arr)
 {
 	int		i;
 
@@ -30,7 +30,7 @@ char	**strarr_dup(char **arr)
 	int		size;
 	char	**res;
 
-	size = arr_size(arr);
+	size = strarr_len(arr);
 	res = malloc(sizeof(char *) * (size + 1));
 	i = 0;
 	while (i < size)

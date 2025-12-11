@@ -19,7 +19,7 @@ char	**strarr_expand(char **arr)
 	int		i;
 	char	**res;
 
-	size_old = arr_size(arr);
+	size_old = strarr_len(arr);
 	size_new = size_old + 1;
 	res = malloc(sizeof(char *) * (size_new + 1));
 	i = 0;
@@ -38,7 +38,7 @@ void	strarr_append(char ***arr, char *new_str)
 {
 	int		size;
 
-	size = arr_size(*arr);
+	size = strarr_len(*arr);
 	*arr = strarr_expand(*arr);
 	(*arr)[size] = ft_strdup(new_str);
 }

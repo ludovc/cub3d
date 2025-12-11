@@ -63,7 +63,7 @@ void	split_file(char **arr, char ***settings, char ***map)
 	}
 	res[i] = NULL;
 	*settings = res;
-	size_new = arr_size(arr) - size;
+	size_new = strarr_len(arr) - size;
 	res = malloc(sizeof(char *) * (size_new + 1));
 	i = 0;
 	while (i < size_new)

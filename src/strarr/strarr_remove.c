@@ -29,7 +29,7 @@ void	strarr_remove_index(char **arr, int index)
 {
 	int		size;
 
-	size = arr_size(arr);
+	size = strarr_len(arr);
 	free(arr[index]);
 	strarr_shift(arr, index, size);
 }
