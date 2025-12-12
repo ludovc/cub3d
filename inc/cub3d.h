@@ -98,4 +98,6 @@ int	check_settings(t_settings *settings);
 
 char	**get_map(char *path);
 
+int	parsing(t_game *game);
+
 #endif
