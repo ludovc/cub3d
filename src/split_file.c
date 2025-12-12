@@ -1,17 +1,5 @@
 #include "../inc/cub3d.h"
 
-void	print_strarr(char **arr)
-{
-	int		i;
-
-	i = 0;
-	while (arr[i])
-	{
-		ft_printf("%s\n", arr[i]);
-		i++;
-	}
-}
-
 void	print_splitted_file(char **settings, char **map)
 {
 	printf("---------\n");
