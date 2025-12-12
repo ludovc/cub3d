@@ -14,15 +14,6 @@
 
 char	**get_map(char *path);
 
-void	print_splitted_file(char **settings, char **map)
-{
-	printf("---------\n");
-	print_strarr(settings);
-	printf("---------\n");
-	print_strarr(map);
-	printf("---------\n");
-}
-
 int	check_leftovers(char **settings)
 {
 	int		i;
