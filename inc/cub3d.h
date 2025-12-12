@@ -96,4 +96,6 @@ void	print_settings(t_settings *a);
 // check_settings.c
 int	check_settings(t_settings *settings);
 
+char	**get_map(char *path);
+
 #endif

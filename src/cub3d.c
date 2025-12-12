@@ -12,8 +12,6 @@
 
 #include "../inc/cub3d.h"
 
-char	**get_map(char *path);
-
 int	check_leftovers(char **settings)
 {
 	int		i;
