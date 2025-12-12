@@ -23,31 +23,60 @@ void	print_splitted_file(char **settings, char **map)
 	printf("---------\n");
 }
 
-void	parsing(t_game *game)
+int	check_leftovers(char **settings)
+{
+	int		i;
+
+	i = 0;
+	while (settings[i])
+	{
+		if (settings[i][0] != '\0')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	parsing(t_game *game)
 {
 	char	**settings;
 	char	**map;
 	char	**file;
 
 	file = get_file("./maps/scene1.cub");
-	// print_strarr(file);
 	split_file(file, &settings, &map);
 	free_strarr(file);
 	game->settings = extract_settings(settings);
 	if (!game->settings)
 	{
 		ft_printf("Settings invalide\n");
+		free_strarr(settings);
+		free_strarr(map);
+		return (0);
 	}
-	else if (check_settings(game->settings) == 0)
+	if (!check_leftovers(settings))
+	{
 		ft_printf("Settings invalide\n");
-	// check_leftovers();
+		ft_printf("leftovers\n");
+		free_strarr(settings);
+		free_strarr(map);
+		return (0);
+	}
 	free_strarr(settings);
-
-	if (validate_map(map))
+	if (!check_settings(game->settings))
+	{
+		ft_printf("Settings invalide\n");
+		free_strarr(map);
+		return (0);
+	}
+	if (validate_map(map) == 1)
+	{
 		ft_printf("MAPPA INVALIDA\n");
-	else
-		ft_printf("MAPPA BUONA\n");
+		free_strarr(map);
+		return (0);
+	}
 	free_strarr(map);
+	return (1);
 }
 
 void	free_all(t_game *game)
