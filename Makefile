@@ -12,7 +12,6 @@
 # OBJDIR = Directory dove verranno salvati i file oggetto (.o)
 # Vengono richiamati con la sintassi $(NOME_VARIABILE)
 
-
 # ============================================================================
 # GESTIONE FILE SORGENTE E OGGETTO
 # ============================================================================
@@ -22,7 +21,6 @@
 # automaticamente ogni file .c in src/ nel corrispondente file .o in obj/
 # Sintassi: $(VAR:pattern=replacement) sostituisce pattern con replacement
 # % è una wildcard che rappresenta qualsiasi stringa
-
 
 # ============================================================================
 # CONFIGURAZIONE COMPILATORE E FLAGS
@@ -80,7 +78,6 @@ RESET = \033[0m
 # Dipende da tutti i file oggetto (OBJS) che devono essere compilati prima
 # Il comando linka tutti gli oggetti con le librerie necessarie
 
-
 # ============================================================================
 # REGOLE PATTERN E GESTIONE DIRECTORY
 # ============================================================================
@@ -93,14 +90,12 @@ RESET = \033[0m
 # Target per creare la directory degli oggetti se non esiste
 # L'opzione -p crea directory parent se necessario, senza errori se esiste già
 
-
 # ============================================================================
 # GESTIONE DIPENDENZE ESTERNE
 # ============================================================================
 # Target per compilare la libreria libft in modo ricorsivo
 # L'opzione -C cambia directory prima di eseguire make
 # --no-print-directory evita che make stampi "Entering/Leaving directory"
-
 # Target per gestire la libreria MLX con auto-download se necessaria
 # Il simbolo @ sopprime l'output del comando (silent execution)
 # La struttura if/fi è sintassi shell per condizioni
@@ -111,7 +106,6 @@ RESET = \033[0m
 
 
 # TARGET PRINCIPALE
-
 all: $(MLX) $(LIBFT) $(NAME)
 
 $(NAME): $(OBJS)
@@ -121,7 +115,6 @@ $(NAME): $(OBJS)
 
 
 # REGOLE DI COMPILAZIONE
-
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
 	@printf "\r\033[K$(CYAN)Compiling: $(GREEN)$<$(RESET)"
@@ -130,7 +123,6 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 
 # GESTIONE DIPENDENZE
-
 $(LIBFT):
 	@printf "$(YELLOW)Building libft...$(RESET)\n"
 	@$(MAKE) -C libft --no-print-directory
@@ -192,6 +184,8 @@ deps:
 	@$(MAKE) clean -C minilibx --no-print-directory 2>/dev/null || true
 	@$(MAKE) $(MLX) $(LIBFT)
 
+.PHONY: all clean fclean re info deps
+
 
 # ============================================================================
 # DICHIARAZIONE TARGET PHONY
@@ -199,5 +193,3 @@ deps:
 # I target phony non corrispondono a file reali, sono solo nomi di azioni
 # Questo evita conflitti se esistessero file con questi nomi nella directory
 # e garantisce che vengano sempre eseguiti quando richiesti
-
-.PHONY: all clean fclean re info deps

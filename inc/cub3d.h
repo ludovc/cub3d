@@ -11,16 +11,36 @@
 #define S_KEY 115
 #define D_KEY 100
 
-#define WIDTH 300
-#define HEIGHT 200
+#define WIDTH 1080
+#define HEIGHT 720
 
 #define BLACK 0x000000
 #define GREEN 0x39FF14
+#define RED 0xFF0000
+#define YELLOW 0xFFFF00
 
+#define MINIMAP_OFFSET_X 30
+#define MINIMAP_OFFSET_Y (HEIGHT - 200)
+#define MINIMAP_WALL_FILL_COLOR 0x555555
+#define MINIMAP_TILE_SIZE 12
+#define MINIMAP_WALL_THICKNESS 1
+
+#define MOVE_SPEED 0.05f
+#define PLAYER_SIZE 4
+
+
+
+typedef struct s_img {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+} t_img;
 
 typedef struct s_player {
-	int x;
-	int y;
+	float x;
+	float y;
 	int color;
 } t_player;
 
@@ -43,23 +63,37 @@ typedef struct s_settings
 	char	*c;
 }	t_settings;
 
+typedef struct s_keys {
+	int w_pressed;
+	int a_pressed;
+	int s_pressed;
+	int d_pressed;
+} t_keys;
+
 typedef struct s_game {
 	void *mlx;
 	void *win;
+	t_img img;
 	t_player player;
 	char **map;
 	char **scene;
 	t_settings	*settings;
+	t_keys keys;
 } t_game;
 
 // mlx_hook.c
 int	close_window();
-int handle_key(int keycode, void *param);
+int handle_keypress(int keycode, void *param);
+int handle_keyrelease(int keycode, void *param);
+int game_loop(void *param);
+
+// cub3d.c
+void initialization(t_game *game);
 
 // mlx_draw.c
-void move_player(t_player *player, int dx, int dy);
-void draw_player(void *mlx_ptr, void *win_ptr, t_player *player);
-void clear_player(void *mlx_ptr, void *win_ptr, t_player *player);
+void move_player(t_game *game, float dx, float dy);
+int is_walkable(char **map, int x, int y);
+void draw_player(t_img *img, t_player *player);
 void update_player(t_game *game, int dx, int dy);
 
 // cub_parse.c
@@ -78,17 +112,25 @@ char **create_map(char *scene_file);
 
 char	**get_file(char *path);
 void	print_strarr(char **arr);
-void	split_file(char **arr, char ***settings, char ***map);
-void	print_splitted_file(char **settings, char **map);
+int	split_file(char **arr, char ***settings, char ***map);
 #include "../src/strarr/strarr.h"
 
 // extract_settings.c
 t_settings	*extract_settings(char **settings);
 
+// extract .cub section.c
+// ho modificato settings.c per usare queste due al fine di normalizzare la mappa
+char **extract_settings_section(char **arr, int settings_size);
+char **extract_map_section(char **arr, int start_idx);
+
 // parse map
 int	validate_map(char **map);
 int is_valid_tile(char c);
 int is_spawn(char c);
+int find_player_spawn(char **map, float *x, float *y);
+int	map_height(char **map);
+int	map_max_width(char **map);
+void normalize_map(char ***map);
 
 void	free_settings(t_settings *a);
 void	print_settings(t_settings *a);
@@ -96,8 +138,16 @@ void	print_settings(t_settings *a);
 // check_settings.c
 int	check_settings(t_settings *settings);
 
-char	**get_map(char *path);
-
-int	parsing(t_game *game);
+// draw & normalize minimap
+void ft_mlx_pixel_put(t_img *img, int x, int y, int color);
+void init_image(t_game *game);
+void clear_image(t_img *img, int color);
+void render_frame(t_game *game);
+void draw_minimap(t_game *game);
+void draw_minimap_dynamic(t_game *game);
+void draw_h_edge(t_img *img, int x0, int y0, int color);
+void draw_v_edge(t_img *img, int x0, int y0, int color);
+int	get_map_max_width(char **arr, int start);
+char *pad_line(char *line, int target_width);
 
 #endif

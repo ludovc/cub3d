@@ -1,12 +1,15 @@
 #include "../inc/cub3d.h"
 
-void	print_splitted_file(char **settings, char **map)
+void	print_strarr(char **arr)
 {
-	printf("---------\n");
-	print_strarr(settings);
-	printf("---------\n");
-	print_strarr(map);
-	printf("---------\n");
+	int		i;
+
+	i = 0;
+	while (arr[i])
+	{
+		ft_printf("%s\n", arr[i]);
+		i++;
+	}
 }
 
 int	skip_spaces(char *str)
@@ -43,31 +46,20 @@ int	arr_size_settings(char **arr)
 	return (i);
 }
 
-void	split_file(char **arr, char ***settings, char ***map)
+int split_file(char **arr, char ***settings, char ***map)
 {
-	int		i;
-	int		size;
-	int		size_new;
-	char	**res;
+    int settings_size;
 
-	size = arr_size_settings(arr);
-	res = malloc(sizeof(char *) * (size + 1));
-	i = 0;
-	while (i < size)
-	{
-		res[i] = ft_strdup(arr[i]);
-		i++;
-	}
-	res[i] = NULL;
-	*settings = res;
-	size_new = strarr_len(arr) - size;
-	res = malloc(sizeof(char *) * (size_new + 1));
-	i = 0;
-	while (i < size_new)
-	{
-		res[i] = ft_strdup(arr[size + i]);
-		i++;
-	}
-	res[i] = NULL;
-	*map = res;
+    settings_size = arr_size_settings(arr);
+    *settings = extract_settings_section(arr, settings_size);
+    if (!*settings)
+        return (0);
+    *map = extract_map_section(arr, settings_size);
+    if (!*map)
+    {
+        free_strarr(*settings);
+        *settings = NULL;
+        return (0);
+    }
+    return (1);
 }

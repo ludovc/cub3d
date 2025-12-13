@@ -41,3 +41,29 @@ int	is_valid_tile(char c)
 {
 	return (c == '0' || c == '1' || c == ' ' || is_spawn(c));
 }
+
+int find_player_spawn(char **map, float *x, float *y)
+{
+	int row, col;
+	
+	if (!map || !x || !y)
+		return (0);
+		
+	row = 0;
+	while (map[row])
+	{
+		col = 0;
+		while (map[row][col])
+		{
+			if (is_spawn(map[row][col]))
+			{
+				*x = (float)col + 0.5f;  // centro
+				*y = (float)row + 0.5f; 
+				return (1);
+			}
+			col++;
+		}
+		row++;
+	}
+	return (0);  // Spawn non trovato
+}
