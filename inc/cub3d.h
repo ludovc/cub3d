@@ -153,4 +153,6 @@ void draw_v_edge(t_img *img, int x0, int y0, int color);
 int	get_map_max_width(char **arr, int start);
 char *pad_line(char *line, int target_width);
 
+void	free_all(t_game *game);
+
 #endif
