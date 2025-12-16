@@ -11,16 +11,36 @@
 #define S_KEY 115
 #define D_KEY 100
 
-#define WIDTH 300
-#define HEIGHT 200
+#define WIDTH 1080
+#define HEIGHT 720
 
 #define BLACK 0x000000
 #define GREEN 0x39FF14
+#define RED 0xFF0000
+#define YELLOW 0xFFFF00
 
+#define MINIMAP_OFFSET_X 30
+#define MINIMAP_OFFSET_Y (HEIGHT - 200)
+#define MINIMAP_WALL_FILL_COLOR 0x555555
+#define MINIMAP_TILE_SIZE 12
+#define MINIMAP_WALL_THICKNESS 1
+
+#define MOVE_SPEED 0.05f
+#define PLAYER_SIZE 4
+
+
+
+typedef struct s_img {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+} t_img;
 
 typedef struct s_player {
-	int x;
-	int y;
+	float x;
+	float y;
 	int color;
 } t_player;
 
