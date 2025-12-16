@@ -1,17 +1,5 @@
 #include "../inc/cub3d.h"
 
-void	print_strarr(char **arr)
-{
-	int		i;
-
-	i = 0;
-	while (arr[i])
-	{
-		ft_printf("%s\n", arr[i]);
-		i++;
-	}
-}
-
 int	skip_spaces(char *str)
 {
 	int	i;
