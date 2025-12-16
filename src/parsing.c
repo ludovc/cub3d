@@ -52,6 +52,6 @@ int	parsing(t_game *game)
 		free_strarr(map);
 		return (0);
 	}
-	free_strarr(map);
+	game->map = map;
 	return (1);
 }
