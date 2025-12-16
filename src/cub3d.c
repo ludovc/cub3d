@@ -39,17 +39,23 @@ int	main()
 	t_game game;
 
 	parsing(&game);
-
-	// game.mlx = mlx_init();
-	// game.win = mlx_new_window(game.mlx, WIDTH, HEIGHT, "CUB3D");
-	// game.player.x = WIDTH / 2;
-	// game.player.y = HEIGHT / 2;
-	// game.player.color = GREEN;
+	initialization(&game);
 	
-	// draw_player(game.mlx, game.win, &game.player);
+	if (!find_player_spawn(game.map, &game.player.x, &game.player.y))
+	{
+		printf("Errore strano: non dovrebbe succedere mai perche gestito nel parsing\n");
+	}
 
-	// mlx_hook(game.win, 17, 0, close_window, NULL);
-	// mlx_hook(game.win, 2, 1, handle_key, &game);
-	// mlx_loop(game.mlx);
+	game.player.color = RED;
+	
+	draw_minimap(&game);									    // per maggiore fluidità del movimento
+	mlx_hook(game.win, 17, 0, close_window, NULL);
+	mlx_hook(game.win, 2, 1L<<0, handle_keypress, &game);		// tasti premuti 
+	mlx_hook(game.win, 3, 1L<<1, handle_keyrelease, &game);		// tasti rilasciati
+	mlx_loop_hook(game.mlx, game_loop, &game);
+	
+	mlx_loop(game.mlx);
+
+
 	free_all(&game);
 }
