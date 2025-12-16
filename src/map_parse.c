@@ -15,11 +15,11 @@ static int	validate_map_chars(char **map, int *spawn_count)
 
 	y = 0;
 	has_errors = 0;
-	while (map && map[y])
+	while (map && map[++y])
 	{
 		row_len = ft_strlen(map[y]);
 		x = 0;
-		while (x < row_len)
+		while (++x < row_len)
 		{
 			c = map[y][x];
 			if (!is_valid_tile(c))
@@ -29,9 +29,7 @@ static int	validate_map_chars(char **map, int *spawn_count)
 			}
 			if (is_spawn(c))
 				(*spawn_count)++;
-			x++;
 		}
-		y++;
 	}
 	return (has_errors);
 }
@@ -69,15 +67,13 @@ static int	validate_map_closed(char **map)
 	int		x;
 	int		row_len;
 	char	c;
-	int		has_errors;
 
 	y = 0;
-	has_errors = 0;
-	while (map && map[y])
+	while (map && map[++y])
 	{
 		row_len = ft_strlen(map[y]);
 		x = 0;
-		while (x < row_len)
+		while (++x < row_len)
 		{
 			c = map[y][x];
 			if (c == '0' || is_spawn(c))
@@ -85,14 +81,12 @@ static int	validate_map_closed(char **map)
 				if (has_void_neighbor(map, y, x))
 				{
 					ft_printf("Error: no confining wall at line %d, column %d\n", y + 1, x + 1);
-					has_errors = 1;
+					return (1);
 				}
 			}
-			x++;
 		}
-		y++;
 	}
-	return (has_errors);
+	return (0);
 }
 
 int	validate_map(char **map)

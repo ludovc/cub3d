@@ -13,99 +13,107 @@
 
 void init_image(t_game *game)
 {
-    game->img.img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-    game->img.addr = mlx_get_data_addr(game->img.img, 
-                                       &game->img.bits_per_pixel,
-                                       &game->img.line_length, 
-                                       &game->img.endian);
+		game->img.img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+		game->img.addr = mlx_get_data_addr(game->img.img, 
+																			 &game->img.bits_per_pixel,
+																			 &game->img.line_length, 
+																			 &game->img.endian);
 }
 
 void clear_image(t_img *img, int color)
 {
-    int x;
-    int y;
+		int x;
+		int y;
 
-    y = 0;
-    while (y < HEIGHT)
-    {
-        x = 0;
-        while (x < WIDTH)
-        {
-            ft_mlx_pixel_put(img, x, y, color);
-            x++;
-        }
-        y++;
-    }
+		y = 0;
+		while (y < HEIGHT)
+		{
+				x = 0;
+				while (x < WIDTH)
+				{
+						ft_mlx_pixel_put(img, x, y, color);
+						x++;
+				}
+				y++;
+		}
 }
 
 void render_frame(t_game *game)
 {
-    mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
+		mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
 
 static void fill_tile(t_img *img, int x0, int y0, int color)
 {
-  int x;
-  int y;
+	int x;
+	int y;
 
-  y = 0;
-  while (y < MINIMAP_TILE_SIZE)
-  {
-    x = 0;
-    while (x < MINIMAP_TILE_SIZE)
-    {
-      ft_mlx_pixel_put(img, x0 + x, y0 + y, color);
-      x++;
-    }
-    y++;
-  }
+	y = 0;
+	while (y < MINIMAP_TILE_SIZE)
+	{
+		x = 0;
+		while (x < MINIMAP_TILE_SIZE)
+		{
+			ft_mlx_pixel_put(img, x0 + x, y0 + y, color);
+			x++;
+		}
+		y++;
+	}
 }
 
 static char bounds_check(char **map, int y, int x)
 {
 	int row_len;
-    if (y < 0 || x < 0)
+		if (y < 0 || x < 0)
 		return ' ';
-    if (!map || !map[y])
+		if (!map || !map[y])
 		return ' ';
-    row_len = (int)ft_strlen(map[y]);
-    if (x >= row_len)
+		row_len = (int)ft_strlen(map[y]);
+		if (x >= row_len)
 		return ' ';
-    return map[y][x];
+		return map[y][x];
+}
+
+static void draw_edge_if_needed(t_img *img, char neighbor, int x, int y, int is_horizontal)
+{
+	if (neighbor == '0' || is_spawn(neighbor))
+	{
+		if (is_horizontal)
+			draw_h_edge(img, x, y, GREEN);
+		else
+			draw_v_edge(img, x, y, GREEN);
+	}
 }
 
 static void draw_borders(t_game *g, int cx, int cy)
 {
-    int x0;
-    int y0;
-    int x1;
-    int y1;
+	int x0;
+	int y0;
+	int x1;
+	int y1;
 
 	x0 = MINIMAP_OFFSET_X + (cx * MINIMAP_TILE_SIZE);
 	y0 = MINIMAP_OFFSET_Y + (cy * MINIMAP_TILE_SIZE);
 	x1 = x0 + MINIMAP_TILE_SIZE;
 	y1 = y0 + MINIMAP_TILE_SIZE;
 
-	char up;
-    char down;
-    char left;
-    char right;
-
-	up = bounds_check(g->map, cy - 1, cx);
-	down = bounds_check(g->map, cy + 1, cx);
-	left = bounds_check(g->map, cy, cx - 1);
-	right = bounds_check(g->map, cy, cx + 1);
-
-    if (up == '0' || is_spawn(up))
-		draw_h_edge(&g->img, x0, y0, GREEN);
-    if (down == '0' || is_spawn(down))
-		draw_h_edge(&g->img, x0, y1 - MINIMAP_WALL_THICKNESS, GREEN);
-    if (left == '0' || is_spawn(left))
-		draw_v_edge(&g->img, x0, y0, GREEN);
-    if (right == '0' || is_spawn(right))
-		draw_v_edge(&g->img, x1 - MINIMAP_WALL_THICKNESS, y0, GREEN);
+	draw_edge_if_needed(&g->img, bounds_check(g->map, cy - 1, cx), x0, y0, 1); // up
+	draw_edge_if_needed(&g->img, bounds_check(g->map, cy + 1, cx), x0, y1 - MINIMAP_WALL_THICKNESS, 1); // down
+	draw_edge_if_needed(&g->img, bounds_check(g->map, cy, cx - 1), x0, y0, 0); // left
+	draw_edge_if_needed(&g->img, bounds_check(g->map, cy, cx + 1), x1 - MINIMAP_WALL_THICKNESS, y0, 0); // right
 }
-
+static void draw_minimap_cell(t_game *game, int x, int y, char c)
+{
+	if (c == '1' || c == ' ')
+	{
+		fill_tile(&game->img, 
+							MINIMAP_OFFSET_X + (x * MINIMAP_TILE_SIZE), 
+							MINIMAP_OFFSET_Y + (y * MINIMAP_TILE_SIZE), 
+							MINIMAP_WALL_FILL_COLOR);
+		if (c == '1')
+			draw_borders(game, x, y);
+	}
+}
 // Disegna tutto quello che deve essere renderizzato solo una volta (senza player)
 void draw_minimap_static(t_game *game)
 {
@@ -116,9 +124,7 @@ void draw_minimap_static(t_game *game)
 
 	if (!game || !game->map)
 		return;
-
 	clear_image(&game->img, BLACK);
-
 	y = 0;
 	while (game->map[y])
 	{
@@ -127,15 +133,7 @@ void draw_minimap_static(t_game *game)
 		while (x < row_len)
 		{
 			c = game->map[y][x];
-      if (c == '1' || c == ' ')
-      {
-        fill_tile(&game->img, 
-                  MINIMAP_OFFSET_X + (x * MINIMAP_TILE_SIZE), 
-                  MINIMAP_OFFSET_Y + (y * MINIMAP_TILE_SIZE), 
-                  MINIMAP_WALL_FILL_COLOR);
-        if (c == '1')
-          draw_borders(game, x, y);
-      }
+			draw_minimap_cell(game, x, y, c);
 			x++;
 		}
 		y++;
@@ -151,10 +149,10 @@ void draw_minimap_static(t_game *game)
 */
 void draw_minimap(t_game *game)
 {
-    if (!game || !game->map)
-        return;
-        
-    draw_minimap_static(game);
-    draw_player(&game->img, &game->player);
-    render_frame(game);
+		if (!game || !game->map)
+				return;
+				
+		draw_minimap_static(game);
+		draw_player(&game->img, &game->player);
+		render_frame(game);
 }
