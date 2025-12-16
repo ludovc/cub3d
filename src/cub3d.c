@@ -43,6 +43,7 @@ int	main()
 	t_game game;
 
 	parsing(&game);
+
 	initialization(&game);
 	
 	if (!find_player_spawn(game.map, &game.player.x, &game.player.y))

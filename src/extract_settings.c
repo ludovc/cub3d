@@ -71,30 +71,18 @@ char	*strarr_pop(char **strarr, char *var)
 
 t_settings	*extract_settings(char **settings)
 {
-	int		valid;
 	t_settings	*a;
 
 	a = malloc(sizeof(t_settings));
-	valid = 1;
+
 	a->no = strarr_pop(settings, "NO");
-	if (!a->no)
-		valid = 0;
 	a->so = strarr_pop(settings, "SO");
-	if (!a->so)
-		valid = 0;
 	a->we = strarr_pop(settings, "WE");
-	if (!a->we)
-		valid = 0;
 	a->ea = strarr_pop(settings, "EA");
-	if (!a->ea)
-		valid = 0;
 	a->f = strarr_pop(settings, "F");
-	if (!a->f)
-		valid = 0;
 	a->c = strarr_pop(settings, "C");
-	if (!a->c)
-		valid = 0;
-	if (!valid)
+
+	if (!a->no || !a->so || !a->we || !a->ea || !a->f || !a->c)
 	{
 		free_settings(a);
 		return (NULL);

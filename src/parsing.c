@@ -29,7 +29,7 @@ int	parsing(t_game *game)
 		ft_printf("Settings invalide\n");
 		free_strarr(settings);
 		free_strarr(map);
-		return (0);
+		exit(1);
 	}
 	if (!check_leftovers(settings))
 	{
@@ -37,20 +37,21 @@ int	parsing(t_game *game)
 		ft_printf("leftovers\n");
 		free_strarr(settings);
 		free_strarr(map);
-		return (0);
+		exit(1);
 	}
 	free_strarr(settings);
 	if (!check_settings(game->settings))
 	{
 		ft_printf("Settings invalide\n");
 		free_strarr(map);
-		return (0);
+		exit(1);
 	}
 	if (validate_map(map) == 1)
 	{
 		ft_printf("MAPPA INVALIDA\n");
 		free_strarr(map);
-		return (0);
+		free_settings(game->settings);
+		exit(1);
 	}
 	game->map = map;
 	return (1);
