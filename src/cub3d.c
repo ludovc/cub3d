@@ -32,6 +32,9 @@ void	free_all(t_game *game)
 		free_settings(game->settings);
 	if (game->img.img)
 		mlx_destroy_image(game->mlx, game->img.img);
+	mlx_destroy_window(game->mlx, game->win);
+	mlx_destroy_display(game->mlx);
+	free(game->mlx);
 }
 
 int	main()
