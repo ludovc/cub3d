@@ -5,7 +5,7 @@ int handle_keypress(int keycode, void *param)
 	t_game *game = (t_game *)param;
 	
 	if (keycode == ESC_KEY)
-		close_window();
+		close_window(game);
 	else if (keycode == W_KEY)
 		game->keys.w_pressed = 1;
 	else if (keycode == S_KEY)
