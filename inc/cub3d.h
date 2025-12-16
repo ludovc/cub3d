@@ -139,8 +139,18 @@ void	print_settings(t_settings *a);
 // check_settings.c
 int	check_settings(t_settings *settings);
 
-char	**get_map(char *path);
-
 int	parsing(t_game *game);
+
+// draw & normalize minimap
+void ft_mlx_pixel_put(t_img *img, int x, int y, int color);
+void init_image(t_game *game);
+void clear_image(t_img *img, int color);
+void render_frame(t_game *game);
+void draw_minimap(t_game *game);
+void draw_minimap_dynamic(t_game *game);
+void draw_h_edge(t_img *img, int x0, int y0, int color);
+void draw_v_edge(t_img *img, int x0, int y0, int color);
+int	get_map_max_width(char **arr, int start);
+char *pad_line(char *line, int target_width);
 
 #endif
