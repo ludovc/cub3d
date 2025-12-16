@@ -112,17 +112,26 @@ char **create_map(char *scene_file);
 
 char	**get_file(char *path);
 void	print_strarr(char **arr);
-void	split_file(char **arr, char ***settings, char ***map);
+int	split_file(char **arr, char ***settings, char ***map);
 void	print_splitted_file(char **settings, char **map);
 #include "../src/strarr/strarr.h"
 
 // extract_settings.c
 t_settings	*extract_settings(char **settings);
 
+// extract .cub section.c
+// ho modificato settings.c per usare queste due al fine di normalizzare la mappa
+char **extract_settings_section(char **arr, int settings_size);
+char **extract_map_section(char **arr, int start_idx);
+
 // parse map
 int	validate_map(char **map);
 int is_valid_tile(char c);
 int is_spawn(char c);
+int find_player_spawn(char **map, float *x, float *y);
+int	map_height(char **map);
+int	map_max_width(char **map);
+void normalize_map(char ***map);
 
 void	free_settings(t_settings *a);
 void	print_settings(t_settings *a);
