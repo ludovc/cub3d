@@ -12,10 +12,26 @@
 
 #include "../inc/cub3d.h"
 
+void	initialization(t_game *game)
+{
+	game->mlx = mlx_init();
+	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "CUB3D");
+	
+	init_image(game);
+	
+	// init keys
+	game->keys.w_pressed = 0;
+	game->keys.a_pressed = 0;
+	game->keys.s_pressed = 0;
+	game->keys.d_pressed = 0;
+}
+
 void	free_all(t_game *game)
 {
 	if (game->settings)
 		free_settings(game->settings);
+	if (game->img.img)
+		mlx_destroy_image(game->mlx, game->img.img);
 }
 
 int	main()
