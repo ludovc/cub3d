@@ -63,23 +63,37 @@ typedef struct s_settings
 	char	*c;
 }	t_settings;
 
+typedef struct s_keys {
+	int w_pressed;
+	int a_pressed;
+	int s_pressed;
+	int d_pressed;
+} t_keys;
+
 typedef struct s_game {
 	void *mlx;
 	void *win;
+	t_img img;
 	t_player player;
 	char **map;
 	char **scene;
 	t_settings	*settings;
+	t_keys keys;
 } t_game;
 
 // mlx_hook.c
 int	close_window();
-int handle_key(int keycode, void *param);
+int handle_keypress(int keycode, void *param);
+int handle_keyrelease(int keycode, void *param);
+int game_loop(void *param);
+
+// cub3d.c
+void initialization(t_game *game);
 
 // mlx_draw.c
-void move_player(t_player *player, int dx, int dy);
-void draw_player(void *mlx_ptr, void *win_ptr, t_player *player);
-void clear_player(void *mlx_ptr, void *win_ptr, t_player *player);
+void move_player(t_game *game, float dx, float dy);
+int is_walkable(char **map, int x, int y);
+void draw_player(t_img *img, t_player *player);
 void update_player(t_game *game, int dx, int dy);
 
 // cub_parse.c
