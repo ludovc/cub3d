@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "../minilibx/mlx.h"
 #include "../inc/libft.h"
+#include <math.h>
 
 #define ESC_KEY 65307
 #define W_KEY 119
@@ -28,6 +29,11 @@
 #define MOVE_SPEED 0.05f
 #define PLAYER_SIZE 4
 
+# define MINIMAP_RAY_LEN   (MINIMAP_TILE_SIZE * 6)
+# define RAY_STEP          8
+
+# define PI 3.14159265358979323846
+
 
 
 typedef struct s_img {
@@ -41,6 +47,7 @@ typedef struct s_img {
 typedef struct s_player {
 	float x;
 	float y;
+	float rot;
 	int color;
 } t_player;
 

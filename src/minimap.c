@@ -140,6 +140,71 @@ void draw_minimap_static(t_game *game)
 	}
 }
 
+void draw_line(t_img *img, int x0, int y0, int x1, int y1, int color)
+{
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int sx = (x0 < x1) ? 1 : -1;
+    int sy = (y0 < y1) ? 1 : -1;
+    int err = dx - dy;
+    int e2;
+
+    while (1)
+    {
+        ft_mlx_pixel_put(img, x0, y0, color);
+        if (x0 == x1 && y0 == y1)
+            break;
+        e2 = 2 * err;
+        if (e2 > -dy)
+        {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dx)
+        {
+            err += dx;
+            y0 += sy;
+        }
+    }
+}
+
+void draw_rays_minimap(t_game *game)
+{
+    int x;
+    double cameraX;
+    double rayDirX;
+    double rayDirY;
+    double dirX;
+    double dirY;
+    double planeX;
+    double planeY;
+    int px, py;
+
+	game->player.rot = -PI / 2;
+    dirX = cos(game->player.rot);
+    dirY = sin(game->player.rot);
+    planeX = -dirY * 0.66;
+    planeY =  dirX * 0.66;
+
+    px = MINIMAP_OFFSET_X + game->player.x * MINIMAP_TILE_SIZE;
+    py = MINIMAP_OFFSET_Y + game->player.y * MINIMAP_TILE_SIZE;
+
+    x = 0;
+    while (x < WIDTH)
+    {
+        cameraX = 2.0 * x / WIDTH - 1.0;
+        rayDirX = dirX + planeX * cameraX;
+        rayDirY = dirY + planeY * cameraX;
+
+        draw_line(&game->img,
+            px, py,
+            px + rayDirX * MINIMAP_RAY_LEN,
+            py + rayDirY * MINIMAP_RAY_LEN,
+            RED);
+
+        x += RAY_STEP;
+    }
+}
 
 /*
 ** Chiama draw_minimap_static per disegnare la mappa senza elementi dinamici.
@@ -153,6 +218,7 @@ void draw_minimap(t_game *game)
 				return;
 				
 		draw_minimap_static(game);
+		draw_rays_minimap(game);
 		draw_player(&game->img, &game->player);
 		render_frame(game);
 }
