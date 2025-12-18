@@ -168,6 +168,75 @@ void draw_line(t_img *img, int x0, int y0, int x1, int y1, int color)
     }
 }
 
+static void cast_ray_to_wall(t_game *g,
+    double rayDirX, double rayDirY,
+    double *hitX, double *hitY)
+{
+    int mapX = (int)g->player.x;
+    int mapY = (int)g->player.y;
+
+    double sideDistX;
+    double sideDistY;
+
+    double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1.0 / rayDirX);
+    double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1.0 / rayDirY);
+
+    int stepX;
+    int stepY;
+    int hit = 0;
+    int side;
+
+    if (rayDirX < 0)
+    {
+        stepX = -1;
+        sideDistX = (g->player.x - mapX) * deltaDistX;
+    }
+    else
+    {
+        stepX = 1;
+        sideDistX = (mapX + 1.0 - g->player.x) * deltaDistX;
+    }
+
+    if (rayDirY < 0)
+    {
+        stepY = -1;
+        sideDistY = (g->player.y - mapY) * deltaDistY;
+    }
+    else
+    {
+        stepY = 1;
+        sideDistY = (mapY + 1.0 - g->player.y) * deltaDistY;
+    }
+
+    while (!hit)
+    {
+        if (sideDistX < sideDistY)
+        {
+            sideDistX += deltaDistX;
+            mapX += stepX;
+            side = 0;
+        }
+        else
+        {
+            sideDistY += deltaDistY;
+            mapY += stepY;
+            side = 1;
+        }
+        if (g->map[mapY][mapX] == '1')
+            hit = 1;
+    }
+
+    if (side == 0)
+        *hitX = mapX;
+    else
+        *hitX = g->player.x + (sideDistY - deltaDistY) * rayDirX;
+
+    if (side == 1)
+        *hitY = mapY;
+    else
+        *hitY = g->player.y + (sideDistX - deltaDistX) * rayDirY;
+}
+
 void draw_rays_minimap(t_game *game)
 {
     int x;
@@ -178,7 +247,10 @@ void draw_rays_minimap(t_game *game)
     double dirY;
     double planeX;
     double planeY;
+    double hitX;
+    double hitY;
     int px, py;
+    int hx, hy;
 
 	game->player.rot = -PI / 2;
     dirX = cos(game->player.rot);
@@ -196,11 +268,12 @@ void draw_rays_minimap(t_game *game)
         rayDirX = dirX + planeX * cameraX;
         rayDirY = dirY + planeY * cameraX;
 
-        draw_line(&game->img,
-            px, py,
-            px + rayDirX * MINIMAP_RAY_LEN,
-            py + rayDirY * MINIMAP_RAY_LEN,
-            RED);
+        cast_ray_to_wall(game, rayDirX, rayDirY, &hitX, &hitY);
+
+        hx = MINIMAP_OFFSET_X + hitX * MINIMAP_TILE_SIZE;
+        hy = MINIMAP_OFFSET_Y + hitY * MINIMAP_TILE_SIZE;
+
+        draw_line(&game->img, px, py, hx, hy, RED);
 
         x += RAY_STEP;
     }
