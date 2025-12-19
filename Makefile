@@ -46,7 +46,7 @@
 NAME = cub3d
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I../inc -g
-MLX_FLAGS = -Iminilibx -Lminilibx -lmlx -lXext -lX11
+MLX_FLAGS = -Iminilibx -Lminilibx -lmlx -lXext -lX11 -lm
 
 # Directories
 SRCDIR = src

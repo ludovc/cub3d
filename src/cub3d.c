@@ -37,6 +37,27 @@ void	free_all(t_game *game)
 	mlx_destroy_display(game->mlx);
 	free(game->mlx);
 }
+static void set_player_dir(t_game *g)
+{
+    g->player.dirx = cosf(g->player.angle);
+    g->player.diry = sinf(g->player.angle);
+
+    // plane perpendicolare alla dir, scalata con tan(FOV/2)
+    float k = tanf((float)FOV / 2.0f);
+    g->player.planex = -g->player.diry * k;
+    g->player.planey =  g->player.dirx * k;
+}
+
+// Esempio: dopo find_player_spawn e dopo aver letto il char di spawn
+// (assumendo che tu sappia quale lettera era)
+static void set_angle_from_spawn(t_game *g, char spawn)
+{
+    if (spawn == 'N') g->player.angle = -M_PI_2;
+    if (spawn == 'S') g->player.angle =  M_PI_2;
+    if (spawn == 'E') g->player.angle =  0.0f;
+    if (spawn == 'W') g->player.angle =  M_PI;
+    set_player_dir(g);
+}
 
 int	main()
 {
@@ -50,6 +71,7 @@ int	main()
 	{
 		printf("Errore strano: non dovrebbe succedere mai perche gestito nel parsing\n");
 	}
+	set_angle_from_spawn(&game, game.map[(int)game.player.y][(int)game.player.x]);
 
 	game.player.color = RED;
 	

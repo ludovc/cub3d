@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "../minilibx/mlx.h"
 #include "../inc/libft.h"
+#include <math.h>
 
 #define ESC_KEY 65307
 #define W_KEY 119
@@ -28,6 +29,8 @@
 #define MOVE_SPEED 0.05f
 #define PLAYER_SIZE 4
 
+#define FOV (60.0 * M_PI / 180.0)
+
 
 
 typedef struct s_img {
@@ -39,9 +42,12 @@ typedef struct s_img {
 } t_img;
 
 typedef struct s_player {
-	float x;
-	float y;
-	int color;
+    float x;
+    float y;
+    float angle;      // direzione in radianti
+    float dirx, diry; // vettore direzione
+    float planex, planey; // camera plane (FOV)
+    int color;
 } t_player;
 
 typedef struct s_dimensions {
