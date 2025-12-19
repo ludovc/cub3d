@@ -10,6 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include "../inc/cub3d.h"
 
 void	initialization(t_game *game)
@@ -62,13 +63,19 @@ static void set_angle_from_spawn(t_game *g, char spawn)
     set_player_dir(g);
 }
 
+
 int	main()
 {
 	t_game game;
 
 	parsing(&game);
-
 	initialization(&game);
+
+	game.music_pid = fork();
+	if (game.music_pid == 0) {
+		execlp("aplay", "aplay", "wav/8bit_hospital.wav", NULL);
+		exit(1);
+	}
 	
 	if (!find_player_spawn(game.map, &game.player.x, &game.player.y))
 	{
@@ -79,10 +86,9 @@ int	main()
 	game.player.color = RED;
 	
 	mlx_hook(game.win, 17, 0, close_window, &game);
-	mlx_hook(game.win, 2, 1L<<0, handle_keypress, &game);		// tasti premuti 
-	mlx_hook(game.win, 3, 1L<<1, handle_keyrelease, &game);		// tasti rilasciati
+	mlx_hook(game.win, 2, 1L<<0, handle_keypress, &game);
+	mlx_hook(game.win, 3, 1L<<1, handle_keyrelease, &game);
 	mlx_loop_hook(game.mlx, game_loop, &game);
-	
 	mlx_loop(game.mlx);
 
 

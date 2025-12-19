@@ -99,6 +99,7 @@ typedef struct s_game {
 	char **scene;
 	t_settings	*settings;
 	t_keys keys;
+	int music_pid;
 } t_game;
 
 typedef struct s_ray {
