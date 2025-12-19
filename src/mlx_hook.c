@@ -152,6 +152,7 @@ void	render_game(t_game *game)
 {
 	clear_image(&game->img, BLACK);
 	raycast_scene(game);
+    draw_minimap(game);
 	render_frame(game);
 }
 

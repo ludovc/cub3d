@@ -124,7 +124,6 @@ void draw_minimap_static(t_game *game)
 
 	if (!game || !game->map)
 		return;
-	clear_image(&game->img, BLACK);
 	y = 0;
 	while (game->map[y])
 	{
