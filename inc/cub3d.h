@@ -161,4 +161,6 @@ char *pad_line(char *line, int target_width);
 
 void	free_all(t_game *game);
 
+void	render_game(t_game *game);
+
 #endif

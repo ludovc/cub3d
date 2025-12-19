@@ -95,6 +95,6 @@ void update_player(t_game *game, int dx, int dy)
     move_player(game, dx, dy);
     
     if (old_x != game->player.x || old_y != game->player.y)
-        draw_minimap(game);
+        render_game(game);
 
 }

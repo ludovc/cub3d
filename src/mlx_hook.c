@@ -158,32 +158,26 @@ void	render_game(t_game *game)
 int game_loop(void *param)
 {
 	t_game *game = (t_game *)param;
-	int moved = 0;
 	
 	// Controlla tutti i tasti premuti e muovi di conseguenza
 	if (game->keys.w_pressed)
 	{
 		update_player(game, 0, -1);
-		moved = 1;
 	}
 	if (game->keys.s_pressed)
 	{
 		update_player(game, 0, 1);
-		moved = 1;
 	}
 	if (game->keys.a_pressed)
 	{
 		update_player(game, -1, 0);
-		moved = 1;
 	}
 	if (game->keys.d_pressed)
 	{
 		update_player(game, 1, 0);
-		moved = 1;
 	}
 	
-	if (!moved)
-		render_game(game);
+	render_game(game);
 		
 	return (0);
 }
