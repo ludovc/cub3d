@@ -24,6 +24,8 @@ void	initialization(t_game *game)
 	game->keys.a_pressed = 0;
 	game->keys.s_pressed = 0;
 	game->keys.d_pressed = 0;
+	game->keys.left_pressed = 0;
+	game->keys.right_pressed = 0;
 }
 
 void	free_all(t_game *game)
@@ -37,7 +39,8 @@ void	free_all(t_game *game)
 	mlx_destroy_display(game->mlx);
 	free(game->mlx);
 }
-static void set_player_dir(t_game *g)
+
+void set_player_dir(t_game *g)
 {
     g->player.dirx = cosf(g->player.angle);
     g->player.diry = sinf(g->player.angle);

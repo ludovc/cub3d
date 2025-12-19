@@ -11,6 +11,8 @@
 #define A_KEY 97
 #define S_KEY 115
 #define D_KEY 100
+#define LEFT_ARROW_KEY 65361
+#define RIGHT_ARROW_KEY 65363
 
 #define WIDTH 1080
 #define HEIGHT 720
@@ -28,9 +30,19 @@
 
 #define MOVE_SPEED 0.05f
 #define PLAYER_SIZE 4
+#define CAMERA_ROTATION 0.02
 
+#define M_PI 3.14159265358979323846
+#define M_PI_2 1.57079632679489661923
 #define FOV (60.0 * M_PI / 180.0)
 
+// sostituire con xmp
+#define CEIL_COLOR  0x202020
+#define FLOOR_COLOR 0x404040
+#define N_WALL_COLOR  0xAAAAAA
+#define S_WALL_COLOR  0xAAAAAA
+#define E_WALL_COLOR  0x777777
+#define W_WALL_COLOR  0x777777
 
 
 typedef struct s_img {
@@ -74,6 +86,8 @@ typedef struct s_keys {
 	int a_pressed;
 	int s_pressed;
 	int d_pressed;
+	int left_pressed;
+	int right_pressed;
 } t_keys;
 
 typedef struct s_game {
@@ -86,6 +100,24 @@ typedef struct s_game {
 	t_settings	*settings;
 	t_keys keys;
 } t_game;
+
+typedef struct s_ray {
+    double ray_dirx;
+    double ray_diry;
+    int mapx;
+    int mapy;
+    double delta_distx;
+    double delta_disty;
+    int step_x;
+    int step_y;
+    double side_distx;
+    double side_disty;
+    int side;
+    double perp_dist;
+    int line_h;
+    int draw_start;
+    int draw_end;
+} t_ray;
 
 // mlx_hook.c
 int	close_window();
@@ -162,5 +194,6 @@ char *pad_line(char *line, int target_width);
 void	free_all(t_game *game);
 
 void	render_game(t_game *game);
+void set_player_dir(t_game *g);
 
 #endif
