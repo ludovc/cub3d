@@ -1,10 +1,12 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-#include <stdlib.h>
 #include "../minilibx/mlx.h"
 #include "../inc/libft.h"
+
+#include <signal.h>
 #include <math.h>
+#include <stdlib.h>
 
 #define ESC_KEY 65307
 #define W_KEY 119

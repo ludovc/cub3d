@@ -10,7 +10,6 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include <signal.h>
 #include "../inc/cub3d.h"
 
 void	initialization(t_game *game)
@@ -63,6 +62,14 @@ static void set_angle_from_spawn(t_game *g, char spawn)
     set_player_dir(g);
 }
 
+void soundtrack(t_game *game)
+{
+    game->music_pid = fork();
+    if (game->music_pid == 0) {
+        execlp("aplay", "aplay", "wav/hospital.wav", NULL);
+        exit(1);
+    }
+}
 
 int	main()
 {
@@ -70,12 +77,7 @@ int	main()
 
 	parsing(&game);
 	initialization(&game);
-
-	game.music_pid = fork();
-	if (game.music_pid == 0) {
-		execlp("aplay", "aplay", "wav/8bit_hospital.wav", NULL);
-		exit(1);
-	}
+	soundtrack(&game);
 	
 	if (!find_player_spawn(game.map, &game.player.x, &game.player.y))
 	{
