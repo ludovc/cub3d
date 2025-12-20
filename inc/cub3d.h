@@ -20,47 +20,39 @@
 #define HEIGHT 720
 
 #define BLACK 0x000000
+#define GREY 0x555555
 #define GREEN 0x39FF14
 #define RED 0xFF0000
 #define YELLOW 0xFFFF00
 
 #define MINIMAP_OFFSET_X 30
 #define MINIMAP_OFFSET_Y (HEIGHT - 200)
-#define MINIMAP_WALL_FILL_COLOR 0x555555
 #define MINIMAP_TILE_SIZE 12
 #define MINIMAP_WALL_THICKNESS 1
 
 #define MOVE_SPEED 0.05f
 #define PLAYER_SIZE 4
 #define CAMERA_ROTATION 0.02
+#define TEXTURE_HEIGHT 641
+#define TEXTURE_WIDTH 736
 
 #define M_PI 3.14159265358979323846
 #define M_PI_2 1.57079632679489661923
 #define FOV (60.0 * M_PI / 180.0)
 
-// sostituire con xmp
-#define CEIL_COLOR  0x202020
-#define FLOOR_COLOR 0x404040
-#define N_WALL_COLOR  0xAAAAAA
-#define S_WALL_COLOR  0xAAAAAA
-#define E_WALL_COLOR  0x777777
-#define W_WALL_COLOR  0x777777
-
-
-typedef struct s_img {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-} t_img;
+#define NORTH_WALL "xpm/wall.xpm"
+#define SOUTH_WALL "xpm/wall.xpm"
+#define EAST_WALL "xpm/wall-dark.xpm"
+#define WEST_WALL "xpm/wall-dark.xpm"
 
 typedef struct s_player {
     float x;
     float y;
-    float angle;      // direzione in radianti
-    float dirx, diry; // vettore direzione
-    float planex, planey; // camera plane (FOV)
+    float angle; // direzione in radianti
+    float dirx;
+	float diry;
+    float planex;
+	float planey;
     int color;
 } t_player;
 
@@ -92,6 +84,21 @@ typedef struct s_keys {
 	int right_pressed;
 } t_keys;
 
+typedef struct s_img {
+	void	*img;
+	char	*addr;
+	int		bpp; // bits per pixel
+	int		line_length;
+	int		endian;
+} t_img;
+
+typedef struct s_textures {
+    t_img n_wall;
+    t_img s_wall;
+    t_img e_wall;
+    t_img w_wall;
+} t_textures;
+
 typedef struct s_game {
 	void *mlx;
 	void *win;
@@ -102,6 +109,7 @@ typedef struct s_game {
 	t_settings	*settings;
 	t_keys keys;
 	int music_pid;
+	t_textures textures;
 } t_game;
 
 typedef struct s_ray {
@@ -121,6 +129,13 @@ typedef struct s_ray {
     int draw_start;
     int draw_end;
 } t_ray;
+
+typedef enum e_wall_dir {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
+}   t_wall_dir;
 
 // mlx_hook.c
 int	close_window();
@@ -198,5 +213,16 @@ void	free_all(t_game *game);
 
 void	render_game(t_game *game);
 void set_player_dir(t_game *g);
+
+// load textures
+int load_textures(t_game *game);
+void draw_ceiling_texture(t_game *game, t_textures *textures);
+void draw_floor_texture(t_game *game, t_textures *textures);
+void draw_wall_texture(t_game *game, t_img *wall_tex, int screen_x, int draw_start, int draw_end, double wall_x);
+
+// Utility: converte una stringa RGB (es: "220,100,0") in un int colore 0xRRGGBB
+int rgb_string_to_int(const char *rgb_str);
+void draw_ceiling(t_game *game);
+void draw_floor(t_game *game);
 
 #endif

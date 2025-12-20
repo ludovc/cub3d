@@ -26,7 +26,7 @@ int	parsing(t_game *game)
 	game->settings = extract_settings(settings);
 	if (!game->settings)
 	{
-		ft_printf("Settings invalide\n");
+		ft_printf("Settings invalide1\n");
 		free_strarr(settings);
 		free_strarr(map);
 		exit(1);
@@ -42,7 +42,7 @@ int	parsing(t_game *game)
 	free_strarr(settings);
 	if (!check_settings(game->settings))
 	{
-		ft_printf("Settings invalide\n");
+		ft_printf("Settings invalide2\n");
 		free_strarr(map);
 		exit(1);
 	}

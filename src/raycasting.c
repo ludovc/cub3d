@@ -1,4 +1,5 @@
 #include "../inc/cub3d.h"
+#include <stdio.h>
 
 static int is_wall(t_game *g, int mx, int my)
 {
@@ -11,18 +12,6 @@ static int is_wall(t_game *g, int mx, int my)
     return(g->map[my][mx] == '1' || g->map[my][mx] == ' '); // questo secondo controllo non dovrebbe servire
 }
 
-static void draw_column(t_game *g, int x, t_ray *ray, int wall_color)
-{
-    int y;
-    
-    y = 0;
-    while (y < ray->draw_start)
-        ft_mlx_pixel_put(&g->img, x, y++, CEIL_COLOR);
-    while (y <= ray->draw_end)
-        ft_mlx_pixel_put(&g->img, x, y++, wall_color);
-    while (y < HEIGHT)
-        ft_mlx_pixel_put(&g->img, x, y++, FLOOR_COLOR);
-}
 
 static void set_ray_steps(t_ray *ray, double player_x, double player_y)
 {
@@ -74,43 +63,25 @@ static void digital_differential_analysis(t_game *g, t_ray *ray)
 
 static void calc_perp_dist(t_ray *ray, double player_x, double player_y)
 {
-    if (ray->side == 0)
+    if (ray->side == 0) // vcerticale
         ray->perp_dist = (ray->mapx - player_x + (1 - ray->step_x) / 2.0) / ray->ray_dirx;
 
-    else
+    else // orrizzontale
         ray->perp_dist = (ray->mapy - player_y + (1 - ray->step_y) / 2.0) / ray->ray_diry;
 
     if (ray->perp_dist < 0.0001)
-        ray->perp_dist = 0.0001;
+        ray->perp_dist = 0.0001; // evita divisioni per zero
 }
 
 static void get_line_limits(t_ray *ray)
 {
-    ray->line_h = (int)(HEIGHT / ray->perp_dist);
+    ray->line_h = (int)(HEIGHT / ray->perp_dist); // l'altezza è inversamente proporzionale alla distanza perpendicaolare
     ray->draw_start = -(ray->line_h) / 2 + HEIGHT / 2;
-    ray->draw_end = (ray->line_h) / 2 + HEIGHT / 2;
+    ray->draw_end = (ray->line_h) / 2 + HEIGHT / 2; // queste due centrano la colonna verticale disegnata su schermo
     if (ray->draw_start < 0)
         ray->draw_start = 0;
     if (ray->draw_end >= HEIGHT)
-        ray->draw_end = HEIGHT - 1;
-}
-
-static int get_wall_color(t_ray *ray)
-{
-    if (ray->side == 0) // colpito muro verticale
-    {
-        if (ray->ray_dirx > 0)
-            return E_WALL_COLOR;
-        else
-            return W_WALL_COLOR;
-    }
-    else // colpito muro orizzontale
-    {
-        if (ray->ray_diry > 0)
-            return S_WALL_COLOR;
-        else
-            return N_WALL_COLOR;
-    }
+        ray->draw_end = HEIGHT - 1; // questi due if si assicurano che non si esca dai bordi
 }
 
 static void init_ray(t_game *g, int x, t_ray *ray)
@@ -123,7 +94,7 @@ static void init_ray(t_game *g, int x, t_ray *ray)
     ray->mapx = (int)g->player.x;
     ray->mapy = (int)g->player.y;
     if (ray->ray_dirx == 0)
-        ray->delta_distx = 1e30;
+        ray->delta_distx = 1e30; // evita errori di calcolo e divisioni per zero con un valore grandissimo
     else
         ray->delta_distx = fabs(1.0 / ray->ray_dirx);
     if (ray->ray_diry == 0)
@@ -135,8 +106,6 @@ static void init_ray(t_game *g, int x, t_ray *ray)
 void raycast_scene(t_game *g)
 {
     int     x;
-    int     wall_color;
-
     x = 0;
     while (x < WIDTH)
     {
@@ -146,8 +115,43 @@ void raycast_scene(t_game *g)
         digital_differential_analysis(g, &ray);
         calc_perp_dist(&ray, g->player.x, g->player.y);
         get_line_limits(&ray);
-        wall_color = get_wall_color(&ray);
-        draw_column(g, x, &ray, wall_color);
+
+        // Calcolo della coordinata wall_x per la texture
+        double wall_x;
+        if (ray.side == 0)
+            wall_x = g->player.y + ray.perp_dist * ray.ray_diry;
+        else
+            wall_x = g->player.x + ray.perp_dist * ray.ray_dirx;
+        wall_x -= floor(wall_x);
+
+        // Selezione della texture corretta
+        t_img *wall_tex;
+        if (ray.side == 0) {
+            if (ray.ray_dirx > 0) {
+                wall_tex = &g->textures.e_wall;
+            } else {
+                wall_tex = &g->textures.w_wall;
+            }
+        } else {
+            if (ray.ray_diry > 0) {
+                wall_tex = &g->textures.s_wall;
+            } else {
+                wall_tex = &g->textures.n_wall;
+            }
+        }
+
+        // Disegna il soffitto sopra la colonna
+        int y = 0;
+        int ceil_color = rgb_string_to_int(g->settings->c);
+        while (y < ray.draw_start)
+            ft_mlx_pixel_put(&g->img, x, y++, ceil_color);
+        // Disegna la colonna del muro con la texture
+        draw_wall_texture(g, wall_tex, x, ray.draw_start, ray.draw_end + 1, wall_x);
+        // Disegna il pavimento sotto la colonna
+        y = ray.draw_end + 1;
+        int floor_color = rgb_string_to_int(g->settings->f);
+        while (y < HEIGHT)
+            ft_mlx_pixel_put(&g->img, x, y++, floor_color);
         x++;
     }
 }

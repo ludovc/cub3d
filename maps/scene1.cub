@@ -1,7 +1,7 @@
-NO xpm/big-grid-cyan.xpm
-SO xpm/big-grid-cyan.xpm
-WE xpm/big-grid-cyan.xpm
-EA xpm/big-grid-cyan.xpm
+NO xpm/wall.xpm
+SO xpm/wall.xpm
+WE xpm/wall-dark.xpm
+EA xpm/wall-dark.xpm
 
 F 220,100,0
 C 225,30,0

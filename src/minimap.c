@@ -15,7 +15,7 @@ void init_image(t_game *game)
 {
 		game->img.img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
 		game->img.addr = mlx_get_data_addr(game->img.img, 
-																			 &game->img.bits_per_pixel,
+																			 &game->img.bpp,
 																			 &game->img.line_length, 
 																			 &game->img.endian);
 }
@@ -109,7 +109,7 @@ static void draw_minimap_cell(t_game *game, int x, int y, char c)
 		fill_tile(&game->img, 
 							MINIMAP_OFFSET_X + (x * MINIMAP_TILE_SIZE), 
 							MINIMAP_OFFSET_Y + (y * MINIMAP_TILE_SIZE), 
-							MINIMAP_WALL_FILL_COLOR);
+							GREY);
 		if (c == '1')
 			draw_borders(game, x, y);
 	}

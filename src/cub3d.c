@@ -77,6 +77,7 @@ int	main()
 
 	parsing(&game);
 	initialization(&game);
+	load_textures(&game);
 	soundtrack(&game);
 	
 	if (!find_player_spawn(game.map, &game.player.x, &game.player.y))
