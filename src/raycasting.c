@@ -69,8 +69,8 @@ static void calc_perp_dist(t_ray *ray, double player_x, double player_y)
     else // orrizzontale
         ray->perp_dist = (ray->mapy - player_y + (1 - ray->step_y) / 2.0) / ray->ray_diry;
 
-    if (ray->perp_dist < 0.0001)
-        ray->perp_dist = 0.0001; // evita divisioni per zero
+    if (ray->perp_dist < 0.5)
+        ray->perp_dist = 0.5; // evita divisioni per zero
 }
 
 static void get_line_limits(t_ray *ray)
@@ -128,15 +128,15 @@ void raycast_scene(t_game *g)
         t_img *wall_tex;
         if (ray.side == 0) {
             if (ray.ray_dirx > 0) {
-                wall_tex = &g->textures.e_wall;
+                wall_tex = &g->txtrs.e_wall;
             } else {
-                wall_tex = &g->textures.w_wall;
+                wall_tex = &g->txtrs.w_wall;
             }
         } else {
             if (ray.ray_diry > 0) {
-                wall_tex = &g->textures.s_wall;
+                wall_tex = &g->txtrs.s_wall;
             } else {
-                wall_tex = &g->textures.n_wall;
+                wall_tex = &g->txtrs.n_wall;
             }
         }
 
@@ -167,6 +167,11 @@ void render_game(t_game *game)
 int game_loop(void *param)
 {
     t_game *game = (t_game *)param;
+    if (game->state == MENU)
+    {
+        show_menu(game);
+        return (0);
+    }
     float move_x = 0.0f;
     float move_y = 0.0f;
     if (game->keys.w_pressed)

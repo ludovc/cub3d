@@ -34,9 +34,21 @@ void	free_all(t_game *game)
 		free_settings(game->settings);
 	if (game->img.img)
 		mlx_destroy_image(game->mlx, game->img.img);
+	if (game->menu_img.img)
+		mlx_destroy_image(game->mlx, game->menu_img.img);
+	if (game->music_pid > 0) 															// aggiunto per still reachable ma non cambia
+	{
+		kill(game->music_pid, SIGTERM);
+		waitpid(game->music_pid, NULL, 0);
+	}
+	if (game->txtrs.n_wall.img) mlx_destroy_image(game->mlx, game->txtrs.n_wall.img);	// pure questo.. mi rimangono 896 bytes in 8 blocchi
+	if (game->txtrs.s_wall.img) mlx_destroy_image(game->mlx, game->txtrs.s_wall.img);
+	if (game->txtrs.e_wall.img) mlx_destroy_image(game->mlx, game->txtrs.e_wall.img);
+	if (game->txtrs.w_wall.img) mlx_destroy_image(game->mlx, game->txtrs.w_wall.img);
 	free_strarr(game->map);
 	mlx_destroy_window(game->mlx, game->win);
 	mlx_destroy_display(game->mlx);
+
 	free(game->mlx);
 }
 
@@ -78,8 +90,10 @@ int	main()
 	parsing(&game);
 	initialization(&game);
 	load_textures(&game);
-	soundtrack(&game);
-	
+
+	game.state = MENU;
+	load_menu_image(&game);
+
 	if (!find_player_spawn(game.map, &game.player.x, &game.player.y))
 	{
 		printf("Errore strano: non dovrebbe succedere mai perche gestito nel parsing\n");

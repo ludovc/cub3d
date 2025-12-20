@@ -6,20 +6,20 @@ int load_textures(t_game *game)
     int w;
     int h;
 
-    game->textures.n_wall.img = mlx_xpm_file_to_image(game->mlx, NORTH_WALL, &w, &h);
-    game->textures.n_wall.addr = mlx_get_data_addr(game->textures.n_wall.img, \
-        &game->textures.n_wall.bpp, &game->textures.n_wall.line_length, &game->textures.n_wall.endian);
-    game->textures.s_wall.img = mlx_xpm_file_to_image(game->mlx, SOUTH_WALL, &w, &h);
-    game->textures.s_wall.addr = mlx_get_data_addr(game->textures.s_wall.img, \
-        &game->textures.s_wall.bpp, &game->textures.s_wall.line_length, &game->textures.s_wall.endian);
-    game->textures.e_wall.img = mlx_xpm_file_to_image(game->mlx, EAST_WALL, &w, &h);
-    game->textures.e_wall.addr = mlx_get_data_addr(game->textures.e_wall.img, \
-        &game->textures.e_wall.bpp, &game->textures.e_wall.line_length, &game->textures.e_wall.endian);
-    game->textures.w_wall.img = mlx_xpm_file_to_image(game->mlx, WEST_WALL, &w, &h);
-    game->textures.w_wall.addr = mlx_get_data_addr(game->textures.w_wall.img, \
-        &game->textures.w_wall.bpp, &game->textures.w_wall.line_length, &game->textures.w_wall.endian);
+    game->txtrs.n_wall.img = mlx_xpm_file_to_image(game->mlx, NORTH_WALL, &w, &h);
+    game->txtrs.n_wall.addr = mlx_get_data_addr(game->txtrs.n_wall.img, \
+        &game->txtrs.n_wall.bpp, &game->txtrs.n_wall.line_length, &game->txtrs.n_wall.endian);
+    game->txtrs.s_wall.img = mlx_xpm_file_to_image(game->mlx, SOUTH_WALL, &w, &h);
+    game->txtrs.s_wall.addr = mlx_get_data_addr(game->txtrs.s_wall.img, \
+        &game->txtrs.s_wall.bpp, &game->txtrs.s_wall.line_length, &game->txtrs.s_wall.endian);
+    game->txtrs.e_wall.img = mlx_xpm_file_to_image(game->mlx, EAST_WALL, &w, &h);
+    game->txtrs.e_wall.addr = mlx_get_data_addr(game->txtrs.e_wall.img, \
+        &game->txtrs.e_wall.bpp, &game->txtrs.e_wall.line_length, &game->txtrs.e_wall.endian);
+    game->txtrs.w_wall.img = mlx_xpm_file_to_image(game->mlx, WEST_WALL, &w, &h);
+    game->txtrs.w_wall.addr = mlx_get_data_addr(game->txtrs.w_wall.img, \
+        &game->txtrs.w_wall.bpp, &game->txtrs.w_wall.line_length, &game->txtrs.w_wall.endian);
 
-    if (!game->textures.n_wall.img || !game->textures.s_wall.img || !game->textures.e_wall.img || !game->textures.w_wall.img)
+    if (!game->txtrs.n_wall.img || !game->txtrs.s_wall.img || !game->txtrs.e_wall.img || !game->txtrs.w_wall.img)
         return (0);
 
     return (1);

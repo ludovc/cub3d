@@ -5,6 +5,7 @@
 #include "../inc/libft.h"
 
 #include <signal.h>
+#include <sys/wait.h>
 #include <math.h>
 #include <stdlib.h>
 
@@ -15,6 +16,8 @@
 #define D_KEY 100
 #define LEFT_ARROW_KEY 65361
 #define RIGHT_ARROW_KEY 65363
+#define ENTER_KEY 65293
+#define SPACE_KEY 32
 
 #define WIDTH 1080
 #define HEIGHT 720
@@ -82,6 +85,7 @@ typedef struct s_keys {
 	int d_pressed;
 	int left_pressed;
 	int right_pressed;
+	int enter_pressed;
 } t_keys;
 
 typedef struct s_img {
@@ -99,17 +103,24 @@ typedef struct s_textures {
     t_img w_wall;
 } t_textures;
 
+typedef enum e_game_state {
+    MENU,
+    PLAYING
+}   t_game_state;
+
 typedef struct s_game {
-	void *mlx;
-	void *win;
-	t_img img;
-	t_player player;
-	char **map;
-	char **scene;
-	t_settings	*settings;
-	t_keys keys;
-	int music_pid;
-	t_textures textures;
+    void *mlx;
+    void *win;
+    t_img img;
+    t_player player;
+    char **map;
+    char **scene;
+    t_settings   *settings;
+    t_keys keys;
+    int music_pid;
+    t_textures txtrs;
+    t_game_state state; // aggiunto stato del gioco
+    t_img menu_img;     // aggiunto per menu.xpm
 } t_game;
 
 typedef struct s_ray {
@@ -214,15 +225,26 @@ void	free_all(t_game *game);
 void	render_game(t_game *game);
 void set_player_dir(t_game *g);
 
-// load textures
 int load_textures(t_game *game);
-void draw_ceiling_texture(t_game *game, t_textures *textures);
-void draw_floor_texture(t_game *game, t_textures *textures);
+void draw_ceiling_texture(t_game *game, t_textures *txtrs);
+void draw_floor_texture(t_game *game, t_textures *txtrs);
 void draw_wall_texture(t_game *game, t_img *wall_tex, int screen_x, int draw_start, int draw_end, double wall_x);
 
-// Utility: converte una stringa RGB (es: "220,100,0") in un int colore 0xRRGGBB
 int rgb_string_to_int(const char *rgb_str);
 void draw_ceiling(t_game *game);
 void draw_floor(t_game *game);
+
+void show_menu(t_game *game);
+void load_menu_image(t_game *game);
+int menu_key_handler(int keycode, t_game *game);
+int is_in_menu(void);
+
+// Prototipi delle funzioni di gioco
+int handle_keypress(int keycode, void *param);
+int handle_keyrelease(int keycode, void *param);
+int game_loop(void *param);
+void soundtrack(t_game *game);
+void	reset_keys(t_keys *keys);
+
 
 #endif
