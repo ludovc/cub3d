@@ -54,33 +54,34 @@ void	free_all(t_game *game)
 
 void set_player_dir(t_game *g)
 {
-    g->player.dirx = cosf(g->player.angle);
-    g->player.diry = sinf(g->player.angle);
+	g->player.dirx = cosf(g->player.angle);
+	g->player.diry = sinf(g->player.angle);
 
-    // plane perpendicolare alla dir, scalata con tan(FOV/2)
-    float k = tanf((float)FOV / 2.0f);
-    g->player.planex = -g->player.diry * k;
-    g->player.planey =  g->player.dirx * k;
+	// plane perpendicolare alla dir, scalata con tan(FOV/2)
+	float k = tanf((float)FOV / 2.0f);
+	g->player.planex = -g->player.diry * k;
+	g->player.planey =  g->player.dirx * k;
 }
 
 // Esempio: dopo find_player_spawn e dopo aver letto il char di spawn
 // (assumendo che tu sappia quale lettera era)
 static void set_angle_from_spawn(t_game *g, char spawn)
 {
-    if (spawn == 'N') g->player.angle = -M_PI_2;
-    if (spawn == 'S') g->player.angle =  M_PI_2;
-    if (spawn == 'E') g->player.angle =  0.0f;
-    if (spawn == 'W') g->player.angle =  M_PI;
-    set_player_dir(g);
+	if (spawn == 'N') g->player.angle = -M_PI_2;
+	if (spawn == 'S') g->player.angle =  M_PI_2;
+	if (spawn == 'E') g->player.angle =  0.0f;
+	if (spawn == 'W') g->player.angle =  M_PI;
+	set_player_dir(g);
 }
 
 void soundtrack(t_game *game)
 {
-    game->music_pid = fork();
-    if (game->music_pid == 0) {
-        execlp("aplay", "aplay", "wav/hospital.wav", NULL);
-        exit(1);
-    }
+	game->music_pid = fork();
+	if (game->music_pid == 0)
+	{
+		execlp("aplay", "aplay", "wav/hospital.wav", NULL);
+		exit(1);
+	}
 }
 
 int	main()
