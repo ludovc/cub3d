@@ -3,8 +3,8 @@ SO xpm/wall.xpm
 WE xpm/wall-dark.xpm
 EA xpm/wall-dark.xpm
 
-F 220,100,0
-C 225,30,0
+F 220,100,42
+C 225,30,42
 
 
    111111111111111111111111111111

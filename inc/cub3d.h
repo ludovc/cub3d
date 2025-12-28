@@ -154,8 +154,6 @@ int handle_keypress(int keycode, void *param);
 int handle_keyrelease(int keycode, void *param);
 int game_loop(void *param);
 
-// cub3d.c
-void initialization(t_game *game);
 
 // mlx_draw.c
 void move_player(t_game *game, float dx, float dy);
@@ -196,6 +194,7 @@ int	validate_map(char **map);
 int is_valid_tile(char c);
 int is_spawn(char c);
 int find_player_spawn(char **map, float *x, float *y);
+void spawn_player(t_game *game);
 int	map_height(char **map);
 int	map_max_width(char **map);
 void normalize_map(char ***map);

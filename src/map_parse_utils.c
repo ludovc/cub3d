@@ -42,6 +42,27 @@ int	is_valid_tile(char c)
 	return (c == '0' || c == '1' || c == ' ' || is_spawn(c));
 }
 
+void set_player_dir(t_game *g)
+{
+	g->player.dirx = cosf(g->player.angle);
+	g->player.diry = sinf(g->player.angle);
+
+	// plane perpendicolare alla dir, scalata con tan(FOV/2)
+	float k = tanf((float)FOV / 2.0f);
+	g->player.planex = -g->player.diry * k;
+	g->player.planey =  g->player.dirx * k;
+}
+
+// Esempio: dopo find_player_spawn e dopo aver letto il char di spawn
+void set_angle_from_spawn(t_game *g, char spawn)
+{
+	if (spawn == 'N') g->player.angle = -M_PI_2;
+	if (spawn == 'S') g->player.angle =  M_PI_2;
+	if (spawn == 'E') g->player.angle =  0.0f;
+	if (spawn == 'W') g->player.angle =  M_PI;
+	set_player_dir(g);
+}
+
 int find_player_spawn(char **map, float *x, float *y)
 {
 	int row, col;
@@ -66,4 +87,16 @@ int find_player_spawn(char **map, float *x, float *y)
 		row++;
 	}
 	return (0);  // Spawn non trovato
+}
+
+void spawn_player(t_game *game)
+{
+	if(!find_player_spawn(game->map, &game->player.x, &game->player.y))
+	{
+		printf("An error occurred while spawning\n");
+		free_all(game);
+		exit(1);
+	}
+	set_angle_from_spawn(game, game->map[(int)game->player.y][(int)game->player.x]);
+	game->player.color = RED;
 }

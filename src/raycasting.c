@@ -218,14 +218,4 @@ int game_loop(void *param)
     return (0);
 }
 
-int close_window(void *param)
-{
-    t_game *game;
-    game = (t_game *)param;
-    if (game->music_pid > 0)
-        kill(game->music_pid, SIGKILL);
-    free_all(game);
-    exit(0);
-    return (0);
-}
 
