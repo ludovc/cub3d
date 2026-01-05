@@ -40,18 +40,31 @@ void ft_mlx_pixel_put(t_img *img, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
+#define PLAYER_RADIUS 0.26f
+
+static int is_position_free(char **map, float x, float y)
+{
+    float r = PLAYER_RADIUS;
+
+    if (!is_walkable(map, (int)(x - r), (int)(y - r))) return 0;
+    if (!is_walkable(map, (int)(x + r), (int)(y - r))) return 0;
+    if (!is_walkable(map, (int)(x - r), (int)(y + r))) return 0;
+    if (!is_walkable(map, (int)(x + r), (int)(y + r))) return 0;
+    return 1;
+}
 
 void move_player(t_game *game, float dx, float dy)
 {
     float new_x = game->player.x + dx * MOVE_SPEED;
     float new_y = game->player.y + dy * MOVE_SPEED;
-    
-    // Collision detection
-    if (is_walkable(game->map, (int)new_x, (int)new_y))
-    {
+
+    // muovi su X se libero
+    if (is_position_free(game->map, new_x, game->player.y))
         game->player.x = new_x;
+
+    // muovi su Y se libero
+    if (is_position_free(game->map, game->player.x, new_y))
         game->player.y = new_y;
-    }
 }
 
 int is_walkable(char **map, int x, int y)
