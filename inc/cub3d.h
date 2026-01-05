@@ -227,7 +227,7 @@ void set_player_dir(t_game *g);
 int load_textures(t_game *game);
 void draw_ceiling_texture(t_game *game, t_textures *txtrs);
 void draw_floor_texture(t_game *game, t_textures *txtrs);
-void draw_wall_texture(t_game *game, t_img *wall_tex, int screen_x, int draw_start, int draw_end, double wall_x);
+void draw_wall_texture(t_game *game, t_img *tex, int x, int draw_start, int draw_end, int line_height_full, double wall_x);
 
 int rgb_string_to_int(const char *rgb_str);
 void draw_ceiling(t_game *game);

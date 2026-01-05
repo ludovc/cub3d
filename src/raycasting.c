@@ -105,18 +105,25 @@ static void init_ray(t_game *g, int x, t_ray *ray)
 
 void raycast_scene(t_game *g)
 {
-    int     x;
-    x = 0;
+    int x = 0;
+
     while (x < WIDTH)
     {
         t_ray ray;
+
         init_ray(g, x, &ray);
         set_ray_steps(&ray, g->player.x, g->player.y);
         digital_differential_analysis(g, &ray);
         calc_perp_dist(&ray, g->player.x, g->player.y);
-        get_line_limits(&ray);
+        get_line_limits(&ray); // qui dentro probabilmente clippi draw_start/draw_end
 
-        // Calcolo della coordinata wall_x per la texture
+        // ---- 1) line_height "vero" (NON clampato) ----
+        // se nel tuo ray hai già ray.line_height, usa quello invece di ricalcolare.
+        int line_height_full = (int)(HEIGHT / ray.perp_dist);
+        if (line_height_full < 1)
+            line_height_full = 1;
+
+        // ---- 2) calcolo wall_x corretto (già ok) ----
         double wall_x;
         if (ray.side == 0)
             wall_x = g->player.y + ray.perp_dist * ray.ray_diry;
@@ -124,34 +131,30 @@ void raycast_scene(t_game *g)
             wall_x = g->player.x + ray.perp_dist * ray.ray_dirx;
         wall_x -= floor(wall_x);
 
-        // Selezione della texture corretta
+        // ---- 3) selezione texture ----
         t_img *wall_tex;
-        if (ray.side == 0) {
-            if (ray.ray_dirx > 0) {
-                wall_tex = &g->txtrs.e_wall;
-            } else {
-                wall_tex = &g->txtrs.w_wall;
-            }
-        } else {
-            if (ray.ray_diry > 0) {
-                wall_tex = &g->txtrs.s_wall;
-            } else {
-                wall_tex = &g->txtrs.n_wall;
-            }
-        }
+        if (ray.side == 0)
+            wall_tex = (ray.ray_dirx > 0) ? &g->txtrs.e_wall : &g->txtrs.w_wall;
+        else
+            wall_tex = (ray.ray_diry > 0) ? &g->txtrs.s_wall : &g->txtrs.n_wall;
 
-        // Disegna il soffitto sopra la colonna
+        // ---- 4) soffitto ----
         int y = 0;
         int ceil_color = rgb_string_to_int(g->settings->c);
         while (y < ray.draw_start)
             ft_mlx_pixel_put(&g->img, x, y++, ceil_color);
-        // Disegna la colonna del muro con la texture
-        draw_wall_texture(g, wall_tex, x, ray.draw_start, ray.draw_end + 1, wall_x);
-        // Disegna il pavimento sotto la colonna
+
+        // ---- 5) muro (NUOVA FIRMA: passa line_height_full) ----
+        draw_wall_texture(g, wall_tex, x,
+                          ray.draw_start, ray.draw_end + 1,
+                          line_height_full, wall_x);
+
+        // ---- 6) pavimento ----
         y = ray.draw_end + 1;
         int floor_color = rgb_string_to_int(g->settings->f);
         while (y < HEIGHT)
             ft_mlx_pixel_put(&g->img, x, y++, floor_color);
+
         x++;
     }
 }

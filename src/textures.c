@@ -27,34 +27,35 @@ int load_textures(t_game *game)
     return (1);
 }
 
-void draw_wall_texture(t_game *game, t_img *wall_tex, int screen_x, int draw_start, int draw_end, double wall_x)
+void draw_wall_texture(t_game *game, t_img *tex, int x,
+                       int draw_start, int draw_end,
+                       int line_height_full, double wall_x)
 {
-    int y;
-    int tex_x;
-    int tex_y;
-    int line_height;
-    int d;
-    int pixel;
-    
-    line_height = draw_end - draw_start;
-    tex_x = (int)(wall_x * (double)TEXTURE_WIDTH);
+    int tex_x = (int)(wall_x * (double)TEXTURE_WIDTH);
     if (tex_x < 0) tex_x = 0;
     if (tex_x >= TEXTURE_WIDTH) tex_x = TEXTURE_WIDTH - 1;
-    y = draw_start;
-    while (y < draw_end) {
-        d = y * 256 - HEIGHT * 128 + line_height * 128;
-        tex_y = ((d * TEXTURE_HEIGHT) / line_height) / 256;
-        if (tex_y < 0 || tex_y >= TEXTURE_HEIGHT) {
-            y++;
-            continue;
-        }
-        if (!wall_tex || !wall_tex->addr) {
-            y++;
-            continue;
-        }
-        pixel = *(int *)(wall_tex->addr + (tex_y * wall_tex->line_length + tex_x * (wall_tex->bpp / 8)));
-        ft_mlx_pixel_put(&game->img, screen_x, y, pixel);
-        y++;
+
+    if (!tex || !tex->addr) return;
+
+    double step = 1.0 * TEXTURE_HEIGHT / (double)line_height_full;
+
+    // tex_pos deve partire dalla y della texture corrispondente a draw_start
+    // e deve “saltare” automaticamente la parte tagliata fuori schermo
+    double tex_pos = (draw_start - HEIGHT / 2.0 + line_height_full / 2.0) * step;
+
+    for (int y = draw_start; y < draw_end; y++)
+    {
+        int tex_y = (int)tex_pos;
+        tex_pos += step;
+
+        if (tex_y < 0) tex_y = 0;
+        if (tex_y >= TEXTURE_HEIGHT) tex_y = TEXTURE_HEIGHT - 1;
+
+        int pixel = *(int *)(tex->addr
+            + tex_y * tex->line_length
+            + tex_x * (tex->bpp / 8));
+
+        ft_mlx_pixel_put(&game->img, x, y, pixel);
     }
 }
 
