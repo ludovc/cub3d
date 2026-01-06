@@ -69,8 +69,8 @@ static void calc_perp_dist(t_ray *ray, double player_x, double player_y)
     else // orrizzontale
         ray->perp_dist = (ray->mapy - player_y + (1 - ray->step_y) / 2.0) / ray->ray_diry;
 
-    if (ray->perp_dist < 0.5)
-        ray->perp_dist = 0.5; // evita divisioni per zero
+    if (ray->perp_dist < 0.01)
+        ray->perp_dist = 0.01; // evita divisioni per zero
 }
 
 static void get_line_limits(t_ray *ray)

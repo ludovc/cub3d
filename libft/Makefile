@@ -25,7 +25,7 @@ $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):
-	mkdir -p $(OBJDIR)
+	@mkdir -p $(OBJDIR)
 
 clean:
 	rm -rf $(OBJDIR)
@@ -34,5 +34,8 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+ft_calloc.s: ft_calloc.c
+	$(CC) $(CFLAGS) -S $< -o $@
 
 .PHONY: all clean fclean re
