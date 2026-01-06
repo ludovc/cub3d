@@ -35,7 +35,4 @@ fclean: clean
 
 re: fclean all
 
-ft_calloc.s: ft_calloc.c
-	$(CC) $(CFLAGS) -S $< -o $@
-
 .PHONY: all clean fclean re
