@@ -5,7 +5,10 @@ static int handle_menu_keypress(int keycode, t_game *game)
 	if (keycode == ESC_KEY)
 		close_window(game);
 	else if (keycode == ENTER_KEY || keycode == SPACE_KEY)
+	{
 		game->state = PLAYING;
+		soundtrack(game);
+	}
 	return (0);
 }
 

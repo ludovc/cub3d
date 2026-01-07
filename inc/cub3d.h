@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <math.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #define ESC_KEY 65307
 #define W_KEY 119
@@ -33,9 +34,9 @@
 #define MINIMAP_TILE_SIZE 12
 #define MINIMAP_WALL_THICKNESS 1
 
-#define MOVE_SPEED 0.05f
+#define MOVE_SPEED 0.1f
 #define PLAYER_SIZE 4
-#define CAMERA_ROTATION 0.02
+#define CAMERA_ROTATION 0.05
 #define TEXTURE_HEIGHT 641
 #define TEXTURE_WIDTH 736
 
@@ -245,5 +246,13 @@ int game_loop(void *param);
 void soundtrack(t_game *game);
 void	reset_keys(t_keys *keys);
 
+#define MAX_BEATS 2048
+extern float beats[MAX_BEATS];
+extern int num_beats;
+extern int next_beat_idx;
+extern struct timeval music_start_time;
+extern int trippy_color;
+int random_trippy_color(void);
+int get_pixel_color(t_img *img, int x, int y);
 
 #endif

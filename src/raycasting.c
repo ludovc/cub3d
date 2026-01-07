@@ -159,12 +159,33 @@ void raycast_scene(t_game *g)
     }
 }
 
+static int blend_color(int base, int overlay, float alpha)
+{
+    int r = ((1.0f - alpha) * ((base >> 16) & 0xFF) + alpha * ((overlay >> 16) & 0xFF));
+    int g = ((1.0f - alpha) * ((base >> 8) & 0xFF) + alpha * ((overlay >> 8) & 0xFF));
+    int b = ((1.0f - alpha) * (base & 0xFF) + alpha * (overlay & 0xFF));
+    return (r << 16) | (g << 8) | b;
+}
+
+void draw_trippy_overlay(t_game *game, int color)
+{
+    float alpha = 0.4f; // 40% overlay
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            int base = get_pixel_color(&game->img, x, y); // serve una funzione che legge il colore
+            int blended = blend_color(base, color, alpha);
+            ft_mlx_pixel_put(&game->img, x, y, blended);
+        }
+    }
+}
+
 void render_game(t_game *game)
 {
     clear_image(&game->img, BLACK);
     raycast_scene(game);
     draw_minimap(game);
     render_frame(game);
+    draw_trippy_overlay(game, trippy_color); // overlay dopo tutto
 }
 
 int game_loop(void *param)
@@ -174,6 +195,14 @@ int game_loop(void *param)
     {
         show_menu(game);
         return (0);
+    }
+    // --- LOGICA BEAT E COLORE ---
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    float time_since_start = (now.tv_sec - music_start_time.tv_sec) + (now.tv_usec - music_start_time.tv_usec) / 1000000.0f;
+    if (next_beat_idx < num_beats && time_since_start >= beats[next_beat_idx]) {
+        trippy_color = random_trippy_color();
+        next_beat_idx++;
     }
     float move_x = 0.0f;
     float move_y = 0.0f;

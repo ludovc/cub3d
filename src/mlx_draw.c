@@ -40,6 +40,19 @@ void ft_mlx_pixel_put(t_img *img, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
+int get_pixel_color(t_img *img, int x, int y)
+{
+    char *pixel;
+    int color = 0;
+    if (!img || !img->addr) return 0;
+    pixel = img->addr + (y * img->line_length + x * (img->bpp / 8));
+    if (img->endian == 0) // little endian
+        color = *(int *)pixel;
+    else // big endian
+        color = ((unsigned char)pixel[2] << 16) | ((unsigned char)pixel[1] << 8) | (unsigned char)pixel[0];
+    return color;
+}
+
 
 void move_player(t_game *game, float dx, float dy)
 {
