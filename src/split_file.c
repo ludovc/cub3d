@@ -43,20 +43,20 @@ int	arr_size_settings(char **arr)
 	return (i);
 }
 
-int split_file(char **arr, char ***settings, char ***map)
+int	split_file(char **arr, char ***settings, char ***map)
 {
-    int settings_size;
+	int		settings_size;
 
-    settings_size = arr_size_settings(arr);
-    *settings = extract_settings_section(arr, settings_size);
-    if (!*settings)
-        return (0);
-    *map = extract_map_section(arr, settings_size);
-    if (!*map)
-    {
-        free_strarr(*settings);
-        *settings = NULL;
-        return (0);
-    }
-    return (1);
+	settings_size = arr_size_settings(arr);
+	*settings = extract_settings_section(arr, settings_size);
+	if (!*settings)
+		return (0);
+	*map = extract_map_section(arr, settings_size);
+	if (!*map)
+	{
+		free_strarr(*settings);
+		*settings = NULL;
+		return (0);
+	}
+	return (1);
 }
