@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lucasu <lucasu@student.42firenze.it>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/07 15:43:53 by lucasu            #+#    #+#             */
+/*   Updated: 2026/01/07 15:43:54 by lucasu           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/cub3d.h"
 
 int	check_leftovers(char **settings)
@@ -16,15 +28,15 @@ int	check_leftovers(char **settings)
 
 void	exit_with_error(char *msg, char **settings, char **map, t_settings *s)
 {
-    if (msg)
-        ft_printf("%s\n", msg);
-    if (settings)
-        free_strarr(settings);
-    if (map)
-        free_strarr(map);
-    if (s)
-        free_settings(s);
-    exit(1);
+	if (msg)
+		ft_printf("%s\n", msg);
+	if (settings)
+		free_strarr(settings);
+	if (map)
+		free_strarr(map);
+	if (s)
+		free_settings(s);
+	exit(1);
 }
 
 int	parsing(t_game *game)
@@ -37,7 +49,6 @@ int	parsing(t_game *game)
 	split_file(file, &settings, &map);
 	free_strarr(file);
 	game->settings = extract_settings(settings);
-
 	if (!game->settings)
 		exit_with_error("Error: impostazioni mancanti", settings, map, NULL);
 	if (!check_leftovers(settings))
@@ -47,7 +58,6 @@ int	parsing(t_game *game)
 		exit_with_error("Error: impostazioni errate", NULL, map, game->settings);
 	if (validate_map(map) == 1)
 		exit_with_error("Error: mappa invalida", NULL, map, game->settings);
-
 	game->map = map;
 	return (1);
 }
