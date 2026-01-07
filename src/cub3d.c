@@ -14,8 +14,9 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
 
-#define MAX_BEATS 2048
+
 float beats[MAX_BEATS];
 int num_beats = 0;
 int next_beat_idx = 0;
@@ -74,6 +75,9 @@ static void	initialization(t_game *game)
 	game->keys.d_pressed = 0;
 	game->keys.left_pressed = 0;
 	game->keys.right_pressed = 0;
+	// --- INIZIALIZZA TIMER COUNTDOWN ---
+	game->timer_seconds = 162;
+	gettimeofday(&game->timer_last_update, NULL);
 }
 
 void	free_all(t_game *game)
@@ -117,11 +121,27 @@ void soundtrack(t_game *game)
 int	main()
 {
 	t_game game;
+    struct timeval t0, t1, t2, t3, t4;
 
-	parsing(&game);
-	initialization(&game);
-	load_textures(&game);
-	spawn_player(&game);
+    gettimeofday(&t0, NULL);
+
+
+    parsing(&game);
+    gettimeofday(&t1, NULL);
+
+
+    initialization(&game);
+    gettimeofday(&t2, NULL);
+
+
+    load_textures(&game);
+    gettimeofday(&t3, NULL);
+
+
+    spawn_player(&game);
+    gettimeofday(&t4, NULL);
+
+
 	mlx_hook(game.win, 17, 0, close_window, &game);
 	mlx_hook(game.win, 2, 1L<<0, handle_keypress, &game);
 	mlx_hook(game.win, 3, 1L<<1, handle_keyrelease, &game); 

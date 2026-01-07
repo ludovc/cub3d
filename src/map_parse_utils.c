@@ -39,7 +39,7 @@ int	is_spawn(char c)
 
 int	is_valid_tile(char c)
 {
-	return (c == '0' || c == '1' || c == ' ' || is_spawn(c));
+	return (c == '0' || c == '1' || c == '2' || c == '3' || c == ' ' || is_spawn(c));
 }
 
 void set_player_dir(t_game *g)

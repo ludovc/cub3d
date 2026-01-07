@@ -9,7 +9,7 @@ static int is_wall(t_game *g, int mx, int my)
         return(1);
     if (mx >= (int)ft_strlen(g->map[my]))
         return(1);
-    return(g->map[my][mx] == '1' || g->map[my][mx] == ' '); // questo secondo controllo non dovrebbe servire
+    return(g->map[my][mx] == '1' || g->map[my][mx] == ' ' || g->map[my][mx] == '2' || g->map[my][mx] == '3'); // accetta anche '2' e '3' come muro
 }
 
 
@@ -133,7 +133,12 @@ void raycast_scene(t_game *g)
 
         // ---- 3) selezione texture ----
         t_img *wall_tex;
-        if (ray.side == 0)
+        char tile = g->map[ray.mapy][ray.mapx];
+        if (tile == '2')
+            wall_tex = &g->txtrs.win_condition;
+        else if (tile == '3')
+            wall_tex = &g->txtrs.loose_condition;
+        else if (ray.side == 0)
             wall_tex = (ray.ray_dirx > 0) ? &g->txtrs.e_wall : &g->txtrs.w_wall;
         else
             wall_tex = (ray.ray_diry > 0) ? &g->txtrs.s_wall : &g->txtrs.n_wall;
@@ -159,21 +164,47 @@ void raycast_scene(t_game *g)
     }
 }
 
-static int blend_color(int base, int overlay, float alpha)
-{
+// Blending helper
+static int blend_color_alpha(int base, int overlay, float alpha) {
     int r = ((1.0f - alpha) * ((base >> 16) & 0xFF) + alpha * ((overlay >> 16) & 0xFF));
     int g = ((1.0f - alpha) * ((base >> 8) & 0xFF) + alpha * ((overlay >> 8) & 0xFF));
     int b = ((1.0f - alpha) * (base & 0xFF) + alpha * (overlay & 0xFF));
     return (r << 16) | (g << 8) | b;
 }
 
+// Disegna una texture centrata con alpha blending
+void draw_centered_alpha_texture(t_game *game, t_img *tex, float alpha) {
+    if (!tex || !tex->img || !tex->addr) return;
+    int win_w = WIDTH;
+    int win_h = HEIGHT;
+    int tex_w = tex->width;
+    int tex_h = tex->height;
+    int x0 = (win_w - tex_w) / 2;
+    int y0 = (win_h - tex_h) / 2;
+    for (int y = 0; y < tex_h; y++) {
+        for (int x = 0; x < tex_w; x++) {
+            int win_x = x0 + x;
+            int win_y = y0 + y;
+            if (win_x < 0 || win_x >= win_w || win_y < 0 || win_y >= win_h) continue;
+            int tex_offset = y * tex->line_length + x * (tex->bpp / 8);
+            int color = *(int *)(tex->addr + tex_offset);
+            // Gestione trasparenza XPM: disegna solo i pixel con alpha 0 (visibili)
+            if ((color & 0xFF000000) == 0xFF000000) continue;
+            int base = get_pixel_color(&game->img, win_x, win_y);
+            int blended = blend_color_alpha(base, color, alpha);
+            ft_mlx_pixel_put(&game->img, win_x, win_y, blended);
+        }
+    }
+}
+
+// Overlay psichedelico trasparente su tutto lo schermo
 void draw_trippy_overlay(t_game *game, int color)
 {
     float alpha = 0.4f; // 40% overlay
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
-            int base = get_pixel_color(&game->img, x, y); // serve una funzione che legge il colore
-            int blended = blend_color(base, color, alpha);
+            int base = get_pixel_color(&game->img, x, y);
+            int blended = blend_color_alpha(base, color, alpha);
             ft_mlx_pixel_put(&game->img, x, y, blended);
         }
     }
@@ -185,15 +216,37 @@ void render_game(t_game *game)
     raycast_scene(game);
     draw_minimap(game);
     render_frame(game);
-    draw_trippy_overlay(game, trippy_color); // overlay dopo tutto
+    // Applica il filtro trippy solo dopo il primo cambio beat
+    if (next_beat_idx > 0)
+        draw_trippy_overlay(game, trippy_color);
 }
 
 int game_loop(void *param)
 {
+    static int first = 1;
+    static struct timeval t_first;
+    if (first) {
+        gettimeofday(&t_first, NULL);
+        first = 0;
+    }
     t_game *game = (t_game *)param;
     if (game->state == MENU)
     {
         show_menu(game);
+        return (0);
+    }
+    if (game->state == WIN) {
+        clear_image(&game->img, BLACK);
+        render_game(game); // disegna lo sfondo
+        draw_centered_alpha_texture(game, &game->txtrs.win_img, 0.7f);
+        mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
+        return (0);
+    }
+    if (game->state == LOOSE) {
+        clear_image(&game->img, BLACK);
+        render_game(game); // disegna lo sfondo
+        draw_centered_alpha_texture(game, &game->txtrs.loose_img, 0.7f);
+        mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
         return (0);
     }
     // --- LOGICA BEAT E COLORE ---
@@ -203,6 +256,59 @@ int game_loop(void *param)
     if (next_beat_idx < num_beats && time_since_start >= beats[next_beat_idx]) {
         trippy_color = random_trippy_color();
         next_beat_idx++;
+    }
+    // --- LOGICA TIMER COUNTDOWN ---
+    if (now.tv_sec - game->timer_last_update.tv_sec >= 1 && game->timer_seconds > 0) {
+        game->timer_seconds--;
+        game->timer_last_update = now;
+    }
+    // --- LOGICA VITTORIA/SCONFITTA ---
+    int px = (int)game->player.x;
+    int py = (int)game->player.y;
+    int win_found = 0;
+    int loose_found = 0;
+    if (game->timer_seconds > 0) {
+        for (int dy = -1; dy <= 1 && (!win_found && !loose_found); dy++) {
+            for (int dx = -1; dx <= 1 && (!win_found && !loose_found); dx++) {
+                if (dx == 0 && dy == 0) continue;
+                int nx = px + dx;
+                int ny = py + dy;
+                if (ny >= 0 && nx >= 0 && game->map[ny] && nx < (int)ft_strlen(game->map[ny])) {
+                    if (game->map[ny][nx] == '2') win_found = 1;
+                    if (game->map[ny][nx] == '3') loose_found = 1;
+                }
+            }
+        }
+    }
+    if (game->timer_seconds > 0 && win_found) {
+        game->state = WIN;
+        if (game->music_pid > 0) { kill(game->music_pid, SIGTERM); waitpid(game->music_pid, NULL, 0); }
+        game->music_pid = fork();
+        if (game->music_pid == 0) {
+            execlp("aplay", "aplay", "wav/Victory.wav", NULL);
+            exit(1);
+        }
+        return (0);
+    }
+    if (game->timer_seconds > 0 && loose_found) {
+        game->state = LOOSE;
+        if (game->music_pid > 0) { kill(game->music_pid, SIGTERM); waitpid(game->music_pid, NULL, 0); }
+        game->music_pid = fork();
+        if (game->music_pid == 0) {
+            execlp("aplay", "aplay", "wav/Game_Over.wav", NULL);
+            exit(1);
+        }
+        return (0);
+    }
+    if (game->timer_seconds <= 0 && !win_found) {
+        game->state = LOOSE;
+        if (game->music_pid > 0) { kill(game->music_pid, SIGTERM); waitpid(game->music_pid, NULL, 0); }
+        game->music_pid = fork();
+        if (game->music_pid == 0) {
+            execlp("aplay", "aplay", "wav/Game_Over.wav", NULL);
+            exit(1);
+        }
+        return (0);
     }
     float move_x = 0.0f;
     float move_y = 0.0f;

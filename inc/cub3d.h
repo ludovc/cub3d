@@ -49,6 +49,8 @@
 #define EAST_WALL "xpm/wall-dark.xpm"
 #define WEST_WALL "xpm/wall-dark.xpm"
 
+#define MAX_BEATS 2048
+
 typedef struct s_player {
     float x;
     float y;
@@ -95,6 +97,8 @@ typedef struct s_img {
 	int		bpp; // bits per pixel
 	int		line_length;
 	int		endian;
+	int		width;
+	int		height;
 } t_img;
 
 typedef struct s_textures {
@@ -102,11 +106,17 @@ typedef struct s_textures {
     t_img s_wall;
     t_img e_wall;
     t_img w_wall;
+    t_img win_condition; // texture speciale per tile '2'
+    t_img win_img; // texture schermata vittoria
+    t_img loose_img; // texture schermata sconfitta
+    t_img loose_condition; // texture speciale per tile '3'
 } t_textures;
 
 typedef enum e_game_state {
     MENU,
-    PLAYING
+    PLAYING,
+    WIN,
+    LOOSE
 }   t_game_state;
 
 typedef struct s_game {
@@ -122,6 +132,8 @@ typedef struct s_game {
     t_textures txtrs;
     t_game_state state; // aggiunto stato del gioco
     t_img menu_img;     // aggiunto per menu.xpm
+    int timer_seconds;           // secondi rimanenti per il countdown
+    struct timeval timer_last_update; // per aggiornamento ogni secondo
 } t_game;
 
 typedef struct s_ray {

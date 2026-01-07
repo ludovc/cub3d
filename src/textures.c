@@ -6,22 +6,67 @@ int load_textures(t_game *game)
     int w;
     int h;
 
+    struct timeval t0, t1;
+    gettimeofday(&t0, NULL);
+
     game->txtrs.n_wall.img = mlx_xpm_file_to_image(game->mlx, NORTH_WALL, &w, &h);
+    gettimeofday(&t1, NULL);
+    game->txtrs.n_wall.width = w; game->txtrs.n_wall.height = h;
     game->txtrs.n_wall.addr = mlx_get_data_addr(game->txtrs.n_wall.img, \
         &game->txtrs.n_wall.bpp, &game->txtrs.n_wall.line_length, &game->txtrs.n_wall.endian);
+    gettimeofday(&t0, NULL);
+
     game->txtrs.s_wall.img = mlx_xpm_file_to_image(game->mlx, SOUTH_WALL, &w, &h);
+    gettimeofday(&t1, NULL);
+    game->txtrs.s_wall.width = w; game->txtrs.s_wall.height = h;
     game->txtrs.s_wall.addr = mlx_get_data_addr(game->txtrs.s_wall.img, \
         &game->txtrs.s_wall.bpp, &game->txtrs.s_wall.line_length, &game->txtrs.s_wall.endian);
+    gettimeofday(&t0, NULL);
+
     game->txtrs.e_wall.img = mlx_xpm_file_to_image(game->mlx, EAST_WALL, &w, &h);
+    gettimeofday(&t1, NULL);
+    game->txtrs.e_wall.width = w; game->txtrs.e_wall.height = h;
     game->txtrs.e_wall.addr = mlx_get_data_addr(game->txtrs.e_wall.img, \
         &game->txtrs.e_wall.bpp, &game->txtrs.e_wall.line_length, &game->txtrs.e_wall.endian);
+    gettimeofday(&t0, NULL);
+
     game->txtrs.w_wall.img = mlx_xpm_file_to_image(game->mlx, WEST_WALL, &w, &h);
+    gettimeofday(&t1, NULL);
+    game->txtrs.w_wall.width = w; game->txtrs.w_wall.height = h;
     game->txtrs.w_wall.addr = mlx_get_data_addr(game->txtrs.w_wall.img, \
         &game->txtrs.w_wall.bpp, &game->txtrs.w_wall.line_length, &game->txtrs.w_wall.endian);
-    
-    load_menu_image(game);
+    gettimeofday(&t0, NULL);
 
-    if (!game->txtrs.n_wall.img || !game->txtrs.s_wall.img || !game->txtrs.e_wall.img || !game->txtrs.w_wall.img)
+    game->txtrs.win_condition.img = mlx_xpm_file_to_image(game->mlx, "xpm/win_condition.xpm", &w, &h);
+    gettimeofday(&t1, NULL);
+    game->txtrs.win_condition.width = w; game->txtrs.win_condition.height = h;
+    game->txtrs.win_condition.addr = mlx_get_data_addr(game->txtrs.win_condition.img, \
+        &game->txtrs.win_condition.bpp, &game->txtrs.win_condition.line_length, &game->txtrs.win_condition.endian);
+    gettimeofday(&t0, NULL);
+
+    game->txtrs.win_img.img = mlx_xpm_file_to_image(game->mlx, "xpm/win.xpm", &w, &h);
+    gettimeofday(&t1, NULL);
+    game->txtrs.win_img.width = w; game->txtrs.win_img.height = h;
+    game->txtrs.win_img.addr = mlx_get_data_addr(game->txtrs.win_img.img, \
+        &game->txtrs.win_img.bpp, &game->txtrs.win_img.line_length, &game->txtrs.win_img.endian);
+    gettimeofday(&t0, NULL);
+
+    game->txtrs.loose_img.img = mlx_xpm_file_to_image(game->mlx, "xpm/loose.xpm", &w, &h);
+    gettimeofday(&t1, NULL);
+    game->txtrs.loose_img.width = w; game->txtrs.loose_img.height = h;
+    game->txtrs.loose_img.addr = mlx_get_data_addr(game->txtrs.loose_img.img, \
+        &game->txtrs.loose_img.bpp, &game->txtrs.loose_img.line_length, &game->txtrs.loose_img.endian);
+    gettimeofday(&t0, NULL);
+    game->txtrs.loose_condition.img = mlx_xpm_file_to_image(game->mlx, "xpm/wall_loose_condition.xpm", &w, &h);
+    gettimeofday(&t1, NULL);
+    game->txtrs.loose_condition.width = w; game->txtrs.loose_condition.height = h;
+    game->txtrs.loose_condition.addr = mlx_get_data_addr(game->txtrs.loose_condition.img, \
+        &game->txtrs.loose_condition.bpp, &game->txtrs.loose_condition.line_length, &game->txtrs.loose_condition.endian);
+    gettimeofday(&t0, NULL);
+    load_menu_image(game);
+    gettimeofday(&t1, NULL);
+    
+    if (!game->txtrs.n_wall.img || !game->txtrs.s_wall.img || !game->txtrs.e_wall.img || !game->txtrs.w_wall.img || !game->txtrs.win_condition.img || !game->txtrs.win_img.img || !game->txtrs.loose_img.img || !game->txtrs.loose_condition.img)
         return (0);
 
     return (1);

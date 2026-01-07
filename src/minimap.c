@@ -42,6 +42,14 @@ void clear_image(t_img *img, int color)
 void render_frame(t_game *game)
 {
 		mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
+		// --- DISEGNA TIMER COUNTDOWN ---
+		char timer_str[16];
+		int min = game->timer_seconds / 60;
+		int sec = game->timer_seconds % 60;
+		sprintf(timer_str, "%02d:%02d", min, sec);
+		int x = WIDTH/2 - 20; // regola per centrare
+		int y = 10;
+		mlx_string_put(game->mlx, game->win, x, y, 0xFFFFFF, timer_str);
 }
 
 static void fill_tile(t_img *img, int x0, int y0, int color)
@@ -105,13 +113,13 @@ static void draw_borders(t_game *g, int cx, int cy)
 }
 static void draw_minimap_cell(t_game *game, int x, int y, char c)
 {
-	if (c == '1' || c == ' ')
+	if (c == '1' || c == '2' || c == '3' || c == ' ')
 	{
 		fill_tile(&game->img, 
-							MINIMAP_OFFSET_X + (x * MINIMAP_TILE_SIZE), 
-							MINIMAP_OFFSET_Y + (y * MINIMAP_TILE_SIZE), 
-							GREY);
-		if (c == '1')
+					MINIMAP_OFFSET_X + (x * MINIMAP_TILE_SIZE), 
+					MINIMAP_OFFSET_Y + (y * MINIMAP_TILE_SIZE), 
+					GREY);
+		if (c == '1' || c == '2' || c == '3')
 			draw_borders(game, x, y);
 	}
 }
