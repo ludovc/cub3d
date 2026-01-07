@@ -1,16 +1,11 @@
 #include "../inc/cub3d.h"
 
-/*controlli:    mappa vuota, 
-                caratteri invalidi, 
-                numero spawn, 
-                mappa non chiusa*/
-                
 static int	validate_map_chars(char **map, int *spawn_count)
 {
 	int		y;
 	int		x;
 	char	c;
-	int	 	row_len;
+	int		row_len;
 	int		has_errors;
 
 	y = 0;

@@ -74,14 +74,12 @@ t_settings	*extract_settings(char **settings)
 	t_settings	*a;
 
 	a = malloc(sizeof(t_settings));
-
 	a->no = strarr_pop(settings, "NO");
 	a->so = strarr_pop(settings, "SO");
 	a->we = strarr_pop(settings, "WE");
 	a->ea = strarr_pop(settings, "EA");
 	a->f = strarr_pop(settings, "F");
 	a->c = strarr_pop(settings, "C");
-
 	if (!a->no || !a->so || !a->we || !a->ea || !a->f || !a->c)
 	{
 		free_settings(a);
