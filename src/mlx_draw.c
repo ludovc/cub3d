@@ -12,8 +12,8 @@ void	ft_mlx_pixel_put(t_img *img, int x, int y, int color)
 
 void	move_player(t_game *game, float dx, float dy)
 {
-	int		new_x;
-	int		new_y;
+	float	new_x;
+	float	new_y;
 
 	new_x = game->player.x + dx * MOVE_SPEED;
 	new_y = game->player.y + dy * MOVE_SPEED;
