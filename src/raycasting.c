@@ -78,6 +78,8 @@ static void	get_line_limits(t_ray *ray)
 		ray->draw_start = 0;
 	if (ray->draw_end >= HEIGHT)
 		ray->draw_end = HEIGHT - 1;
+	if (ray->line_h < 1)
+		ray->line_h = 1;
 }
 
 static void	init_ray(t_game *g, int x, t_ray *ray)
@@ -114,12 +116,6 @@ void	raycast_scene(t_game *g)
 		calc_perp_dist(&ray, g->player.x, g->player.y);
 		get_line_limits(&ray); // qui dentro probabilmente clippi draw_start/draw_end
 
-		// ---- 1) line_height "vero" (NON clampato) ----
-		// se nel tuo ray hai già ray.line_height, usa quello invece di ricalcolare.
-		int line_height_full = (int)(HEIGHT / ray.perp_dist);
-		if (line_height_full < 1)
-			line_height_full = 1;
-
 		// ---- 2) calcolo wall_x corretto (già ok) ----
 		double wall_x;
 		if (ray.side == 0)
@@ -144,7 +140,7 @@ void	raycast_scene(t_game *g)
 		// ---- 5) muro (NUOVA FIRMA: passa line_height_full) ----
 		draw_wall_texture(g, wall_tex, x,
 						  ray.draw_start, ray.draw_end + 1,
-						  line_height_full, wall_x);
+						  ray.line_h, wall_x);
 
 		// ---- 6) pavimento ----
 		y = ray.draw_end + 1;
