@@ -101,9 +101,28 @@ static void	init_ray(t_game *g, int x, t_ray *ray)
 		ray->delta_disty = fabs(1.0 / ray->ray_diry);
 }
 
+void	calculate_wall_x(t_game *g, t_ray *ray, double *wall_x)
+{
+	if (ray->side == 0)
+		*wall_x = g->player.y + ray->perp_dist * ray->ray_diry;
+	else
+		*wall_x = g->player.x + ray->perp_dist * ray->ray_dirx;
+	*wall_x -= floor(*wall_x);
+}
+
+void	texture_selection(t_game *g, t_ray *ray, t_img **wall_tex)
+{
+	if (ray->side == 0)
+		*wall_tex = (ray->ray_dirx > 0) ? &g->txtrs.e_wall : &g->txtrs.w_wall;
+	else
+		*wall_tex = (ray->ray_diry > 0) ? &g->txtrs.s_wall : &g->txtrs.n_wall;
+}
+
 void	raycast_scene(t_game *g)
 {
 	int		x;
+	double	wall_x;
+	t_img	*wall_tex;
 
 	x = 0;
 	while (x < WIDTH)
@@ -114,23 +133,9 @@ void	raycast_scene(t_game *g)
 		set_ray_steps(&ray, g->player.x, g->player.y);
 		digital_differential_analysis(g, &ray);
 		calc_perp_dist(&ray, g->player.x, g->player.y);
-		get_line_limits(&ray); // qui dentro probabilmente clippi draw_start/draw_end
-
-		// ---- 2) calcolo wall_x corretto (già ok) ----
-		double wall_x;
-		if (ray.side == 0)
-			wall_x = g->player.y + ray.perp_dist * ray.ray_diry;
-		else
-			wall_x = g->player.x + ray.perp_dist * ray.ray_dirx;
-		wall_x -= floor(wall_x);
-
-		// ---- 3) selezione texture ----
-		t_img *wall_tex;
-		if (ray.side == 0)
-			wall_tex = (ray.ray_dirx > 0) ? &g->txtrs.e_wall : &g->txtrs.w_wall;
-		else
-			wall_tex = (ray.ray_diry > 0) ? &g->txtrs.s_wall : &g->txtrs.n_wall;
-
+		get_line_limits(&ray);
+		calculate_wall_x(g, &ray, &wall_x);
+		texture_selection(g, &ray, &wall_tex);
 		// ---- 4) soffitto ----
 		int y = 0;
 		int ceil_color = rgb_string_to_int(g->settings->c);
