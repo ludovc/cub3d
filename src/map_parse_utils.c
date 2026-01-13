@@ -32,75 +32,53 @@ int	map_max_width(char **map)
 	return (max);
 }
 
-int	is_spawn(char c)
-{
-	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
-}
-
 int	is_valid_tile(char c)
 {
 	return (c == '0' || c == '1' || c == ' ' || is_spawn(c));
 }
 
-void	set_player_dir(t_game *g)
+int	rgb_string_to_int(const char *rgb_str)
 {
-	float	k;
+	int		i;
+	int		r;
+	int		g;
+	int		b;
+	char	**split;
 
-	g->player.dirx = cosf(g->player.angle);
-	g->player.diry = sinf(g->player.angle);
-	k = tanf((float)FOV / 2.0f);
-	g->player.planex = -g->player.diry * k;
-	g->player.planey = g->player.dirx * k;
-}
-
-// Esempio: dopo find_player_spawn e dopo aver letto il char di spawn
-void	set_angle_from_spawn(t_game *g, char spawn)
-{
-	if (spawn == 'N')
-		g->player.angle = -M_PI_2;
-	if (spawn == 'S')
-		g->player.angle = M_PI_2;
-	if (spawn == 'E')
-		g->player.angle = 0.0f;
-	if (spawn == 'W')
-		g->player.angle = M_PI;
-	set_player_dir(g);
-}
-
-int	find_player_spawn(char **map, float *x, float *y)
-{
-	int		row;
-	int		col;
-
-	if (!map || !x || !y)
+	r = 0;
+	g = 0;
+	b = 0;
+	if (!rgb_str)
 		return (0);
-	row = 0;
-	while (map[row])
+	split = ft_split(rgb_str, ',');
+	if (split)
 	{
-		col = 0;
-		while (map[row][col])
-		{
-			if (is_spawn(map[row][col]))
-			{
-				*x = (float)col + 0.5f;
-				*y = (float)row + 0.5f;
-				return (1);
-			}
-			col++;
-		}
-		row++;
+		if (split[0])
+			r = ft_atoi(split[0]);
+		if (split[1])
+			g = ft_atoi(split[1]);
+		if (split[2])
+			b = ft_atoi(split[2]);
+		i = 0;
+		while (split[i])
+			free(split[i++]);
+		free(split);
 	}
-	return (0);
+	return (((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF));
 }
 
-void	spawn_player(t_game *game)
+int	is_wall(t_game *g, int mx, int my)
 {
-	if (!find_player_spawn(game->map, &game->player.x, &game->player.y))
-	{
-		printf("An error occurred while spawning\n");
-		free_all(game);
-		exit(1);
-	}
-	set_angle_from_spawn(game, game->map[(int)game->player.y][(int)game->player.x]);
-	game->player.color = RED;
+	if (my < 0 || mx < 0)
+		return (1);
+	if (!g->map || !g->map[my])
+		return (1);
+	if (mx >= (int)ft_strlen(g->map[my]))
+		return (1);
+	return (g->map[my][mx] == '1' || g->map[my][mx] == ' ');
 }
+
+
+
+
+

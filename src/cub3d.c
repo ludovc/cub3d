@@ -12,20 +12,6 @@
 
 #include "../inc/cub3d.h"
 
-static void	initialization(t_game *game)
-{
-	game->mlx = mlx_init();
-	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "CUB3D");
-	init_image(game);
-	game->state = MENU;
-	game->keys.w_pressed = 0;
-	game->keys.a_pressed = 0;
-	game->keys.s_pressed = 0;
-	game->keys.d_pressed = 0;
-	game->keys.left_pressed = 0;
-	game->keys.right_pressed = 0;
-}
-
 void	free_all(t_game *game)
 {
 	if (game->settings)

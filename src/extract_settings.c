@@ -11,16 +11,6 @@ void	free_settings(t_settings *a)
 	free(a);
 }
 
-void	print_settings(t_settings *a)
-{
-	printf("NO: %s\n", a->no);
-	printf("SO: %s\n", a->so);
-	printf("WE: %s\n", a->we);
-	printf("EA: %s\n", a->ea);
-	printf("F: %s\n", a->f);
-	printf("C: %s\n", a->c);
-}
-
 char	*right_part(char *str)
 {
 	char	*res;

@@ -12,6 +12,7 @@
 
 #include "../inc/cub3d.h"
 
+
 int	check_leftovers(char **settings)
 {
 	int		i;

@@ -1,5 +1,23 @@
 #include "../inc/cub3d.h"
 
+void	texture_selection(t_game *g, t_ray *ray, t_column *col)
+{
+	if (ray->side == 0)
+	{
+		if (ray->ray_dirx > 0)
+			col->wall_tex = &g->txtrs.e_wall;
+		else
+			col->wall_tex = &g->txtrs.w_wall;
+	}
+	else
+	{
+		if (ray->ray_diry > 0)
+			col->wall_tex = &g->txtrs.s_wall;
+		else
+			col->wall_tex = &g->txtrs.n_wall;
+	}
+}
+
 // file preso dal mio so_long, e riadattato leggermente
 
 char	*ft_strjoin_fs1(char *s1, const char *s2)
@@ -43,7 +61,6 @@ void	remove_newline(char *str)
 		*newline_point = '\0';
 }
 
-// carica il file in un array di stringhe
 char	**get_file(char *path)
 {
 	char	**file;

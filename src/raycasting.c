@@ -1,17 +1,6 @@
 #include "../inc/cub3d.h"
 
-static int	is_wall(t_game *g, int mx, int my)
-{
-	if (my < 0 || mx < 0)
-		return (1);
-	if (!g->map || !g->map[my])
-		return (1);
-	if (mx >= (int)ft_strlen(g->map[my]))
-		return (1);
-	return (g->map[my][mx] == '1' || g->map[my][mx] == ' ');
-}
-
-static void	set_ray_steps(t_ray *ray, double player_x, double player_y)
+void	set_ray_steps(t_ray *ray, double player_x, double player_y)
 {
 	if (ray->ray_dirx < 0)
 	{
@@ -35,7 +24,7 @@ static void	set_ray_steps(t_ray *ray, double player_x, double player_y)
 	}
 }
 
-static void	digital_differential_analysis(t_game *g, t_ray *ray)
+void	digital_differential_analysis(t_game *g, t_ray *ray)
 {
 	int		hit;
 
@@ -59,7 +48,7 @@ static void	digital_differential_analysis(t_game *g, t_ray *ray)
 	}
 }
 
-static void	calc_perp_dist(t_ray *ray, double player_x, double player_y)
+void	calc_perp_dist(t_ray *ray, double player_x, double player_y)
 {
 	if (ray->side == 0)
 		ray->perp_dist = (ray->mapx - player_x + (1 - ray->step_x) / 2.0) / ray->ray_dirx;
@@ -69,7 +58,7 @@ static void	calc_perp_dist(t_ray *ray, double player_x, double player_y)
 		ray->perp_dist = 0.01;
 }
 
-static void	get_line_limits(t_ray *ray)
+void	get_line_limits(t_ray *ray)
 {
 	ray->line_h = (int)(HEIGHT / ray->perp_dist);
 	ray->draw_start = -(ray->line_h) / 2 + HEIGHT / 2;
@@ -82,151 +71,39 @@ static void	get_line_limits(t_ray *ray)
 		ray->line_h = 1;
 }
 
-static void	init_ray(t_game *g, int x, t_ray *ray)
-{
-	double	camera_x;
-
-	camera_x = 2.0 * x / (double)WIDTH - 1.0;
-	ray->ray_dirx = g->player.dirx + g->player.planex * camera_x;
-	ray->ray_diry = g->player.diry + g->player.planey * camera_x;
-	ray->mapx = (int)g->player.x;
-	ray->mapy = (int)g->player.y;
-	if (ray->ray_dirx == 0)
-		ray->delta_distx = 1e30;
-	else
-		ray->delta_distx = fabs(1.0 / ray->ray_dirx);
-	if (ray->ray_diry == 0)
-		ray->delta_disty = 1e30;
-	else
-		ray->delta_disty = fabs(1.0 / ray->ray_diry);
-}
-
 void	calculate_wall_x(t_game *g, t_ray *ray, t_column *col)
 {
 	if (ray->side == 0)
-		col->wall_x = g->player.y + ray->perp_dist * ray->ray_diry;
+		col->wall_x = g->player.y + ray->perp_dist * ray->ray_diry; 
 	else
 		col->wall_x = g->player.x + ray->perp_dist * ray->ray_dirx;
-	col->wall_x -= floor(col->wall_x);
+	col->wall_x -= floor(col->wall_x); 
 }
 
-void	texture_selection(t_game *g, t_ray *ray, t_column *col)
-{
-	if (ray->side == 0)
-	{
-		if (ray->ray_dirx > 0)
-			col->wall_tex = &g->txtrs.e_wall;
-		else
-			col->wall_tex = &g->txtrs.w_wall;
-	}
-	else
-	{
-		if (ray->ray_diry > 0)
-			col->wall_tex = &g->txtrs.s_wall;
-		else
-			col->wall_tex = &g->txtrs.n_wall;
-	}
-}
 
-void	draw_column(t_game *g, t_ray *ray, int x, t_column *col)
-{
-	int		y;
-	int		ceil_color;
-	int		floor_color;
+/*calculate_wall_x (caso side = 1)
+se il raggio colpisce una parete verticale calcola la distanza percorsa dal raggio
+lungo l'asse y fino al punto di impatto con la parete.
 
-	y = 0;
-	ceil_color = rgb_string_to_int(g->settings->c);
-	while (y < ray->draw_start)
-		ft_mlx_pixel_put(&g->img, x, y++, ceil_color);
-	draw_wall_texture(g, col, ray, x);
-	y = ray->draw_end + 1;
-	floor_color = rgb_string_to_int(g->settings->f);
-	while (y < HEIGHT)
-		ft_mlx_pixel_put(&g->img, x, y++, floor_color);
-}
+Se la mappa è una griglia e il raggio colpisce la parete a x = 4.73,
+questa indica la posizione globale, dice che il punto d’impatto si trova 
+nella cella 4 (partendo da 0) e a 0.73 della larghezza della cella.
 
-void	raycast_scene(t_game *g)
-{
-	int			x;
-	t_column	col;
+per posizionare la texture ci dobbiamo ricavare la posizione relativa, il 0.73.
 
-	x = 0;
-	while (x < WIDTH)
-	{
-		t_ray ray;
+in qesto caso ci serve la coordinata y del punto d’impatto, possiamo calcolarla con:
+wall_x = player.y + perp_dist * ray_diry
 
-		init_ray(g, x, &ray);
-		set_ray_steps(&ray, g->player.x, g->player.y);
-		digital_differential_analysis(g, &ray);
-		calc_perp_dist(&ray, g->player.x, g->player.y);
-		get_line_limits(&ray);
-		calculate_wall_x(g, &ray, &col);
-		texture_selection(g, &ray, &col);
-		draw_column(g, &ray, x, &col);
-		x++;
-	}
-}
+otteniamo la coordinata relativa sottraendone la parte intera.
+col->wall_x -= floor(col->wall_x);
 
-void render_game(t_game *game)
-{
-	clear_image(&game->img, BLACK);
-	raycast_scene(game);
-	draw_minimap(game);
-	render_frame(game);
-}
+ora sappiamo quanto il punto d’impatto è distante dal bordo sinistro
+della singola cella, così da poter applicare la texture correttamente.
 
-static void set_position(float *x, float *y, float dx, float dy)
-{
-	*x += dx;
-	*y += dy;
-}
+avanzando con x in raycast_scene() calcoliamo quale pixel della texture usare.*/
 
-static void movement(t_game *game)
-{
-    float x;
-	float y;
-	float len;
 
-	x = 0.0f;
-	y = 0.0f;
-    if (game->keys.w_pressed)
-        set_position(&x, &y, game->player.dirx, game->player.diry);
-    if (game->keys.s_pressed)
-        set_position(&x, &y, -game->player.dirx, -game->player.diry);
-    if (game->keys.a_pressed)
-        set_position(&x, &y, -game->player.planex, -game->player.planey);
-    if (game->keys.d_pressed)
-        set_position(&x, &y, game->player.planex, game->player.planey);
-    if (x != 0.0f || y != 0.0f)
-    {
-        len = sqrtf(x * x + y * y);
-        if (len > 0.0f)
-		{ 
-			x /= len;
-			y /= len;
-		}
-        move_player(game, x, y);
-    }
-}
 
-static void rotation(t_game *game)
-{
-    if (game->keys.left_pressed)  game->player.angle -= CAMERA_ROTATION;
-    if (game->keys.right_pressed) game->player.angle += CAMERA_ROTATION;
-    if (game->keys.left_pressed || game->keys.right_pressed)
-		set_player_dir(game);
-}
 
-int game_loop(void *param)
-{
-    t_game *game = (t_game *)param;
-    if (game->state == MENU)
-	{
-		show_menu(game);
-		return (0);
-	}
-    movement(game);
-    rotation(game);
-    render_game(game);
-    return (0);
-}
+
+
