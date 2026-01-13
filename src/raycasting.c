@@ -113,9 +113,19 @@ void	calculate_wall_x(t_game *g, t_ray *ray, double *wall_x)
 void	texture_selection(t_game *g, t_ray *ray, t_img **wall_tex)
 {
 	if (ray->side == 0)
-		*wall_tex = (ray->ray_dirx > 0) ? &g->txtrs.e_wall : &g->txtrs.w_wall;
+	{
+		if (ray->ray_dirx > 0)
+			*wall_tex = &g->txtrs.e_wall;
+		else
+			*wall_tex = &g->txtrs.w_wall;
+	}
 	else
-		*wall_tex = (ray->ray_diry > 0) ? &g->txtrs.s_wall : &g->txtrs.n_wall;
+	{
+		if (ray->ray_diry > 0)
+			*wall_tex = &g->txtrs.s_wall;
+		else
+			*wall_tex = &g->txtrs.n_wall;
+	}
 }
 
 void	raycast_scene(t_game *g)
