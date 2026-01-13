@@ -128,7 +128,7 @@ void	texture_selection(t_game *g, t_ray *ray, t_column *col)
 	}
 }
 
-void	ceil_wall_and_floor(t_game *g, t_ray *ray, int x, t_column *col)
+void	draw_column(t_game *g, t_ray *ray, int x, t_column *col)
 {
 	int		y;
 	int		ceil_color;
@@ -162,7 +162,7 @@ void	raycast_scene(t_game *g)
 		get_line_limits(&ray);
 		calculate_wall_x(g, &ray, &col);
 		texture_selection(g, &ray, &col);
-		ceil_wall_and_floor(g, &ray, x, &col);
+		draw_column(g, &ray, x, &col);
 		x++;
 	}
 }
@@ -175,56 +175,58 @@ void render_game(t_game *game)
 	render_frame(game);
 }
 
+static void set_position(float *x, float *y, float dx, float dy)
+{
+	*x += dx;
+	*y += dy;
+}
+
+static void movement(t_game *game)
+{
+    float x;
+	float y;
+	float len;
+
+	x = 0.0f;
+	y = 0.0f;
+    if (game->keys.w_pressed)
+        set_position(&x, &y, game->player.dirx, game->player.diry);
+    if (game->keys.s_pressed)
+        set_position(&x, &y, -game->player.dirx, -game->player.diry);
+    if (game->keys.a_pressed)
+        set_position(&x, &y, -game->player.planex, -game->player.planey);
+    if (game->keys.d_pressed)
+        set_position(&x, &y, game->player.planex, game->player.planey);
+    if (x != 0.0f || y != 0.0f)
+    {
+        len = sqrtf(x * x + y * y);
+        if (len > 0.0f)
+		{ 
+			x /= len;
+			y /= len;
+		}
+        move_player(game, x, y);
+    }
+}
+
+static void rotation(t_game *game)
+{
+    if (game->keys.left_pressed)  game->player.angle -= CAMERA_ROTATION;
+    if (game->keys.right_pressed) game->player.angle += CAMERA_ROTATION;
+    if (game->keys.left_pressed || game->keys.right_pressed)
+		set_player_dir(game);
+}
+
 int game_loop(void *param)
 {
-	t_game *game = (t_game *)param;
-	if (game->state == MENU)
+    t_game *game = (t_game *)param;
+    if (game->state == MENU)
 	{
 		show_menu(game);
 		return (0);
 	}
-	float move_x = 0.0f;
-	float move_y = 0.0f;
-	if (game->keys.w_pressed)
-	{
-		move_x += game->player.dirx;
-		move_y += game->player.diry;
-	}
-	if (game->keys.s_pressed)
-	{
-		move_x -= game->player.dirx;
-		move_y -= game->player.diry;
-	}
-	if (game->keys.a_pressed)
-	{
-		move_x -= game->player.planex;
-		move_y -= game->player.planey;
-	}
-	if (game->keys.d_pressed)
-	{
-		move_x += game->player.planex;
-		move_y += game->player.planey;
-	}
-	if (move_x != 0.0f || move_y != 0.0f)
-	{
-		float len = sqrtf(move_x * move_x + move_y * move_y);
-		if (len > 0.0f)
-		{
-			move_x /= len;
-			move_y /= len;
-		}
-		move_player(game, move_x, move_y);
-	}
-	if (game->keys.left_pressed)
-	{
-		game->player.angle -= CAMERA_ROTATION;
-		set_player_dir(game);
-	}
-	if (game->keys.right_pressed)
-	{
-		game->player.angle += CAMERA_ROTATION;
-		set_player_dir(game);
-	}
-	render_game(game);
-	return (0);
+    movement(game);
+    rotation(game);
+    render_game(game);
+    return (0);
 }
