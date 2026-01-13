@@ -148,6 +148,15 @@ typedef enum e_wall_dir {
     WEST
 }   t_wall_dir;
 
+typedef struct s_column
+{
+	double	wall_x;
+	t_img	*wall_tex;
+	double	tex_pos;
+	int		tex_y;
+	int		tex_x;
+}	t_column;
+
 // mlx_hook.c
 int	close_window();
 int handle_keypress(int keycode, void *param);
@@ -227,7 +236,7 @@ void set_player_dir(t_game *g);
 int load_textures(t_game *game);
 void draw_ceiling_texture(t_game *game, t_textures *txtrs);
 void draw_floor_texture(t_game *game, t_textures *txtrs);
-void draw_wall_texture(t_game *game, t_img *tex, int x, int draw_start, int draw_end, int line_height_full, double wall_x);
+void	draw_wall_texture(t_game *game, t_column *col, t_ray *ray, int x);
 
 int rgb_string_to_int(const char *rgb_str);
 void draw_ceiling(t_game *game);

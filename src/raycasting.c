@@ -101,34 +101,34 @@ static void	init_ray(t_game *g, int x, t_ray *ray)
 		ray->delta_disty = fabs(1.0 / ray->ray_diry);
 }
 
-void	calculate_wall_x(t_game *g, t_ray *ray, double *wall_x)
+void	calculate_wall_x(t_game *g, t_ray *ray, t_column *col)
 {
 	if (ray->side == 0)
-		*wall_x = g->player.y + ray->perp_dist * ray->ray_diry;
+		col->wall_x = g->player.y + ray->perp_dist * ray->ray_diry;
 	else
-		*wall_x = g->player.x + ray->perp_dist * ray->ray_dirx;
-	*wall_x -= floor(*wall_x);
+		col->wall_x = g->player.x + ray->perp_dist * ray->ray_dirx;
+	col->wall_x -= floor(col->wall_x);
 }
 
-void	texture_selection(t_game *g, t_ray *ray, t_img **wall_tex)
+void	texture_selection(t_game *g, t_ray *ray, t_column *col)
 {
 	if (ray->side == 0)
 	{
 		if (ray->ray_dirx > 0)
-			*wall_tex = &g->txtrs.e_wall;
+			col->wall_tex = &g->txtrs.e_wall;
 		else
-			*wall_tex = &g->txtrs.w_wall;
+			col->wall_tex = &g->txtrs.w_wall;
 	}
 	else
 	{
 		if (ray->ray_diry > 0)
-			*wall_tex = &g->txtrs.s_wall;
+			col->wall_tex = &g->txtrs.s_wall;
 		else
-			*wall_tex = &g->txtrs.n_wall;
+			col->wall_tex = &g->txtrs.n_wall;
 	}
 }
 
-void	ceil_wall_and_floor(t_game *g, t_ray *ray, int x, t_img *wall_tex, double wall_x)
+void	ceil_wall_and_floor(t_game *g, t_ray *ray, int x, t_column *col)
 {
 	int		y;
 	int		ceil_color;
@@ -138,9 +138,7 @@ void	ceil_wall_and_floor(t_game *g, t_ray *ray, int x, t_img *wall_tex, double w
 	ceil_color = rgb_string_to_int(g->settings->c);
 	while (y < ray->draw_start)
 		ft_mlx_pixel_put(&g->img, x, y++, ceil_color);
-	draw_wall_texture(g, wall_tex, x,
-						ray->draw_start, ray->draw_end + 1,
-						ray->line_h, wall_x);
+	draw_wall_texture(g, col, ray, x);
 	y = ray->draw_end + 1;
 	floor_color = rgb_string_to_int(g->settings->f);
 	while (y < HEIGHT)
@@ -149,9 +147,8 @@ void	ceil_wall_and_floor(t_game *g, t_ray *ray, int x, t_img *wall_tex, double w
 
 void	raycast_scene(t_game *g)
 {
-	int		x;
-	double	wall_x;
-	t_img	*wall_tex;
+	int			x;
+	t_column	col;
 
 	x = 0;
 	while (x < WIDTH)
@@ -163,9 +160,9 @@ void	raycast_scene(t_game *g)
 		digital_differential_analysis(g, &ray);
 		calc_perp_dist(&ray, g->player.x, g->player.y);
 		get_line_limits(&ray);
-		calculate_wall_x(g, &ray, &wall_x);
-		texture_selection(g, &ray, &wall_tex);
-		ceil_wall_and_floor(g, &ray, x, wall_tex, wall_x);
+		calculate_wall_x(g, &ray, &col);
+		texture_selection(g, &ray, &col);
+		ceil_wall_and_floor(g, &ray, x, &col);
 		x++;
 	}
 }

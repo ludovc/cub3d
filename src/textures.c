@@ -23,38 +23,35 @@ int	load_textures(t_game *game)
 	return (1);
 }
 
-void	draw_wall_texture(t_game *game, t_img *tex, int x,
-			int draw_start, int draw_end,
-			int line_height_full, double wall_x)
+void	draw_wall_texture(t_game *game, t_column *col, t_ray *ray, int x)
 {
-	int		tex_x;
 	int		y;
 	double	step;
-	double	tex_pos;
-	int		tex_y;
 	int		pixel;
-
-	tex_x = (int)(wall_x * (double)TEXTURE_WIDTH);
-	if (tex_x < 0)
-		tex_x = 0;
-	if (tex_x >= TEXTURE_WIDTH)
-		tex_x = TEXTURE_WIDTH - 1;
-	if (!tex || !tex->addr)
+	int		new_draw_end;
+	
+	new_draw_end = ray->draw_end + 1;
+	col->tex_x = (int)(col->wall_x * (double)TEXTURE_WIDTH);
+	if (col->tex_x < 0)
+		col->tex_x = 0;
+	if (col->tex_x >= TEXTURE_WIDTH)
+		col->tex_x = TEXTURE_WIDTH - 1;
+	if (!col->wall_tex || !col->wall_tex->addr)
 		return ;
-	step = 1.0 * TEXTURE_HEIGHT / (double)line_height_full;
-	tex_pos = (draw_start - HEIGHT / 2.0 + line_height_full / 2.0) * step;
-	y = draw_start;
-	while (y < draw_end)
+	step = 1.0 * TEXTURE_HEIGHT / (double)ray->line_h;
+	col->tex_pos = (ray->draw_start - HEIGHT / 2.0 + ray->line_h / 2.0) * step;
+	y = ray->draw_start;
+	while (y < new_draw_end)
 	{
-		tex_y = (int)tex_pos;
-		tex_pos += step;
-		if (tex_y < 0)
-			tex_y = 0;
-		if (tex_y >= TEXTURE_HEIGHT)
-			tex_y = TEXTURE_HEIGHT - 1;
-		pixel = *(int *)(tex->addr
-				+ tex_y * tex->line_length
-				+ tex_x * (tex->bpp / 8));
+		col->tex_y = (int)col->tex_pos;
+		col->tex_pos += step;
+		if (col->tex_y < 0)
+			col->tex_y = 0;
+		if (col->tex_y >= TEXTURE_HEIGHT)
+			col->tex_y = TEXTURE_HEIGHT - 1;
+		pixel = *(int *)(col->wall_tex->addr
+				+ col->tex_y * col->wall_tex->line_length
+				+ col->tex_x * (col->wall_tex->bpp / 8));
 		ft_mlx_pixel_put(&game->img, x, y, pixel);
 		y++;
 	}
