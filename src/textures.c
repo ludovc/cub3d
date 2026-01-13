@@ -23,25 +23,16 @@ int	load_textures(t_game *game)
 	return (1);
 }
 
-void	draw_wall_texture(t_game *game, t_column *col, t_ray *ray, int x)
+void	draw_tex_y(t_game *game, t_column *col, t_ray *ray, int x)
 {
-	int		y;
 	double	step;
 	int		pixel;
-	int		new_draw_end;
-	
-	new_draw_end = ray->draw_end + 1;
-	col->tex_x = (int)(col->wall_x * (double)TEXTURE_WIDTH);
-	if (col->tex_x < 0)
-		col->tex_x = 0;
-	if (col->tex_x >= TEXTURE_WIDTH)
-		col->tex_x = TEXTURE_WIDTH - 1;
-	if (!col->wall_tex || !col->wall_tex->addr)
-		return ;
+	int		y;
+
 	step = 1.0 * TEXTURE_HEIGHT / (double)ray->line_h;
 	col->tex_pos = (ray->draw_start - HEIGHT / 2.0 + ray->line_h / 2.0) * step;
 	y = ray->draw_start;
-	while (y < new_draw_end)
+	while (y < ray->draw_end + 1)
 	{
 		col->tex_y = (int)col->tex_pos;
 		col->tex_pos += step;
@@ -55,6 +46,18 @@ void	draw_wall_texture(t_game *game, t_column *col, t_ray *ray, int x)
 		ft_mlx_pixel_put(&game->img, x, y, pixel);
 		y++;
 	}
+}
+
+void	draw_wall_texture(t_game *game, t_column *col, t_ray *ray, int x)
+{
+	col->tex_x = (int)(col->wall_x * (double)TEXTURE_WIDTH);
+	if (col->tex_x < 0)
+		col->tex_x = 0;
+	if (col->tex_x >= TEXTURE_WIDTH)
+		col->tex_x = TEXTURE_WIDTH - 1;
+	if (!col->wall_tex || !col->wall_tex->addr)
+		return ;
+	draw_tex_y(game, col, ray, x);
 }
 
 // Utility: converte una stringa RGB (es: "220,100,0") in un int colore 0xRRGGBB usando solo funzioni della libft
