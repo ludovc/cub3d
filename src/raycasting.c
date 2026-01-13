@@ -128,6 +128,25 @@ void	texture_selection(t_game *g, t_ray *ray, t_img **wall_tex)
 	}
 }
 
+void	ceil_wall_and_floor(t_game *g, t_ray *ray, int x, t_img *wall_tex, double wall_x)
+{
+	int		y;
+	int		ceil_color;
+	int		floor_color;
+
+	y = 0;
+	ceil_color = rgb_string_to_int(g->settings->c);
+	while (y < ray->draw_start)
+		ft_mlx_pixel_put(&g->img, x, y++, ceil_color);
+	draw_wall_texture(g, wall_tex, x,
+						ray->draw_start, ray->draw_end + 1,
+						ray->line_h, wall_x);
+	y = ray->draw_end + 1;
+	floor_color = rgb_string_to_int(g->settings->f);
+	while (y < HEIGHT)
+		ft_mlx_pixel_put(&g->img, x, y++, floor_color);
+}
+
 void	raycast_scene(t_game *g)
 {
 	int		x;
@@ -146,23 +165,7 @@ void	raycast_scene(t_game *g)
 		get_line_limits(&ray);
 		calculate_wall_x(g, &ray, &wall_x);
 		texture_selection(g, &ray, &wall_tex);
-		// ---- 4) soffitto ----
-		int y = 0;
-		int ceil_color = rgb_string_to_int(g->settings->c);
-		while (y < ray.draw_start)
-			ft_mlx_pixel_put(&g->img, x, y++, ceil_color);
-
-		// ---- 5) muro (NUOVA FIRMA: passa line_height_full) ----
-		draw_wall_texture(g, wall_tex, x,
-						  ray.draw_start, ray.draw_end + 1,
-						  ray.line_h, wall_x);
-
-		// ---- 6) pavimento ----
-		y = ray.draw_end + 1;
-		int floor_color = rgb_string_to_int(g->settings->f);
-		while (y < HEIGHT)
-			ft_mlx_pixel_put(&g->img, x, y++, floor_color);
-
+		ceil_wall_and_floor(g, &ray, x, wall_tex, wall_x);
 		x++;
 	}
 }
