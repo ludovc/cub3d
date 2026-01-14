@@ -53,7 +53,8 @@ int	is_rgb(char *str)
 	}
 	else
 	{
-		if (!is_full_digit_string(parts[0]) || !is_full_digit_string(parts[1]) || !is_full_digit_string(parts[2]))
+		if (!is_full_digit_string(parts[0]) || !is_full_digit_string(parts[1])
+			|| !is_full_digit_string(parts[2]))
 			res = 0;
 		else if (ft_atoi(parts[0]) > 255)
 			res = 0;
