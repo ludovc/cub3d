@@ -62,7 +62,7 @@ int	rgb_string_to_int(const char *rgb_str)
 			free(split[i++]);
 		free(split);
 	}
-	return (((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF));
+	return (((rgb[0] & 0xFF) << 16) | ((rgb[1] & 0xFF) << 8) | (rgb[2] & 0xFF));
 }
 
 int	is_wall(t_game *g, int mx, int my)

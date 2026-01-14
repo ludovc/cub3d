@@ -51,9 +51,11 @@ void	digital_differential_analysis(t_game *g, t_ray *ray)
 void	calc_perp_dist(t_ray *ray, double player_x, double player_y)
 {
 	if (ray->side == 0)
-		ray->perp_dist = (ray->mapx - player_x + (1 - ray->step_x) / 2.0) / ray->ray_dirx;
+		ray->perp_dist = (ray->mapx - player_x + (1 - ray->step_x) / 2.0)
+			/ ray->ray_dirx;
 	else
-		ray->perp_dist = (ray->mapy - player_y + (1 - ray->step_y) / 2.0) / ray->ray_diry;
+		ray->perp_dist = (ray->mapy - player_y + (1 - ray->step_y) / 2.0)
+			/ ray->ray_diry;
 	if (ray->perp_dist < 0.01)
 		ray->perp_dist = 0.01;
 }
@@ -74,16 +76,15 @@ void	get_line_limits(t_ray *ray)
 void	calculate_wall_x(t_game *g, t_ray *ray, t_column *col)
 {
 	if (ray->side == 0)
-		col->wall_x = g->player.y + ray->perp_dist * ray->ray_diry; 
+		col->wall_x = g->player.y + ray->perp_dist * ray->ray_diry;
 	else
 		col->wall_x = g->player.x + ray->perp_dist * ray->ray_dirx;
-	col->wall_x -= floor(col->wall_x); 
+	col->wall_x -= floor(col->wall_x);
 }
 
-
 /*calculate_wall_x (caso side = 1)
-se il raggio colpisce una parete verticale calcola la distanza percorsa dal raggio
-lungo l'asse y fino al punto di impatto con la parete.
+se il raggio colpisce una parete verticale calcola la distanza percorsa
+dal raggio lungo l'asse y fino al punto di impatto con la parete.
 
 Se la mappa è una griglia e il raggio colpisce la parete a x = 4.73,
 questa indica la posizione globale, dice che il punto d’impatto si trova 
@@ -91,7 +92,8 @@ nella cella 4 (partendo da 0) e a 0.73 della larghezza della cella.
 
 per posizionare la texture ci dobbiamo ricavare la posizione relativa, il 0.73.
 
-in qesto caso ci serve la coordinata y del punto d’impatto, possiamo calcolarla con:
+in qesto caso ci serve la coordinata y del punto d’impatto,
+possiamo calcolarla con:
 wall_x = player.y + perp_dist * ray_diry
 
 otteniamo la coordinata relativa sottraendone la parte intera.
@@ -101,9 +103,3 @@ ora sappiamo quanto il punto d’impatto è distante dal bordo sinistro
 della singola cella, così da poter applicare la texture correttamente.
 
 avanzando con x in raycast_scene() calcoliamo quale pixel della texture usare.*/
-
-
-
-
-
-

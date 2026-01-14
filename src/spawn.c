@@ -52,6 +52,7 @@ void	spawn_player(t_game *game)
 		free_all(game);
 		exit(1);
 	}
-	set_angle_from_spawn(game, game->map[(int)game->player.y][(int)game->player.x]);
+	set_angle_from_spawn(game,
+		game->map[(int)game->player.y][(int)game->player.x]);
 	game->player.color = RED;
 }

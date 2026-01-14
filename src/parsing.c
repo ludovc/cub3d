@@ -12,7 +12,6 @@
 
 #include "../inc/cub3d.h"
 
-
 int	check_leftovers(char **settings)
 {
 	int		i;
@@ -53,10 +52,12 @@ int	parsing(t_game *game)
 	if (!game->settings)
 		exit_with_error("Error: impostazioni mancanti", settings, map, NULL);
 	if (!check_leftovers(settings))
-		exit_with_error("Error: impostazioni aggiuntive non riconosciute", settings, map, game->settings);
+		exit_with_error("Error: impostazioni aggiuntive non riconosciute",
+			settings, map, game->settings);
 	free_strarr(settings);
 	if (!check_settings(game->settings))
-		exit_with_error("Error: impostazioni errate", NULL, map, game->settings);
+		exit_with_error("Error: impostazioni errate", NULL, map,
+			game->settings);
 	if (validate_map(map) == 1)
 		exit_with_error("Error: mappa invalida", NULL, map, game->settings);
 	game->map = map;

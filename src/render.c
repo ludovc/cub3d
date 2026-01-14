@@ -22,12 +22,11 @@ static void	raycast_scene(t_game *g)
 {
 	int			x;
 	t_column	col;
+	t_ray		ray;
 
 	x = 0;
 	while (x < WIDTH)
 	{
-		t_ray ray;
-
 		init_ray(g, x, &ray);
 		set_ray_steps(&ray, g->player.x, g->player.y);
 		digital_differential_analysis(g, &ray);
@@ -45,7 +44,7 @@ void	render_frame(t_game *game)
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
 
-void render_game(t_game *game)
+void	render_game(t_game *game)
 {
 	if (!game || !game->img.img || !game->map)
 		return ;
