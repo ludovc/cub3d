@@ -40,25 +40,23 @@ int	is_valid_tile(char c)
 int	rgb_string_to_int(const char *rgb_str)
 {
 	int		i;
-	int		r;
-	int		g;
-	int		b;
+	int		rgb[3];
 	char	**split;
 
-	r = 0;
-	g = 0;
-	b = 0;
+	rgb[0] = 0;
+	rgb[1] = 0;
+	rgb[2] = 0;
 	if (!rgb_str)
 		return (0);
 	split = ft_split(rgb_str, ',');
 	if (split)
 	{
 		if (split[0])
-			r = ft_atoi(split[0]);
+			rgb[0] = ft_atoi(split[0]);
 		if (split[1])
-			g = ft_atoi(split[1]);
+			rgb[1] = ft_atoi(split[1]);
 		if (split[2])
-			b = ft_atoi(split[2]);
+			rgb[2] = ft_atoi(split[2]);
 		i = 0;
 		while (split[i])
 			free(split[i++]);
