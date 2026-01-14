@@ -262,4 +262,6 @@ char    bounds_check(char **map, int y, int x);
 void    draw_borders(t_game *g, int cx, int cy);
 int     is_wall(t_game *g, int mx, int my);
 
+int load_textures(t_game *game);
+
 #endif
