@@ -19,7 +19,8 @@ static int	validate_map_chars(char **map, int *spawn_count)
 			c = map[y][x];
 			if (!is_valid_tile(c))
 			{
-				ft_printf("Error: invalid character '%c' in map at line %d, column %d\n", c, y + 1, x + 1);
+				ft_printf("Error: invalid character \
+				'%c' in map at line %d, column %d\n", c, y + 1, x + 1);
 				has_errors = 1;
 			}
 			if (is_spawn(c))
@@ -75,7 +76,8 @@ static int	validate_map_closed(char **map)
 			{
 				if (has_void_neighbor(map, y, x))
 				{
-					ft_printf("Error: no confining wall at line %d, column %d\n", y + 1, x + 1);
+					ft_printf("Error: no confining wall at line \
+					%d, column %d\n", y + 1, x + 1);
 					return (1);
 				}
 			}

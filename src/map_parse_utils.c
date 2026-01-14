@@ -77,8 +77,3 @@ int	is_wall(t_game *g, int mx, int my)
 		return (1);
 	return (g->map[my][mx] == '1' || g->map[my][mx] == ' ');
 }
-
-
-
-
-
