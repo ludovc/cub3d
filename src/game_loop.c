@@ -37,10 +37,12 @@ static void	movement(t_game *game)
 void	set_player_dir(t_game *g)
 {
 	float	k;
+	float	fov;
 
+	fov = 60.0 * M_PI / 180.0;
 	g->player.dirx = cosf(g->player.angle);
 	g->player.diry = sinf(g->player.angle);
-	k = tanf((float)FOV / 2.0f);
+	k = tanf((float)fov / 2.0f);
 	g->player.planex = -g->player.diry * k;
 	g->player.planey = g->player.dirx * k;
 }
