@@ -168,7 +168,6 @@ typedef struct s_column
 }	t_column;
 
 //init.c
-
 void			initialization(t_game *game);
 void			init_ray(t_game *g, int x, t_ray *ray);
 
