@@ -43,7 +43,7 @@
 # e rende il Makefile più flessibile quando si aggiungono nuovi file
 
 
-NAME = cub3d
+NAME = cub3D
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I../inc -g
 MLX_FLAGS = -Iminilibx -Lminilibx -lmlx -lXext -lX11 -lm

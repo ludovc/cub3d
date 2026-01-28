@@ -1,6 +1,6 @@
 a.out
-cub3d
 minilibx/
 obj/
 *.o
 *.a
+cub3D
