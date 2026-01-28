@@ -27,13 +27,13 @@ static int	load_wall_texture(t_game *game, t_img *img, char *path)
 
 static int	load_all_wall_textures(t_game *game)
 {
-	if (!load_wall_texture(game, &game->txtrs.n_wall, NORTH_WALL))
+	if (!load_wall_texture(game, &game->txtrs.n_wall, game->settings->no))
 		return (0);
-	if (!load_wall_texture(game, &game->txtrs.s_wall, SOUTH_WALL))
+	if (!load_wall_texture(game, &game->txtrs.s_wall, game->settings->so))
 		return (0);
-	if (!load_wall_texture(game, &game->txtrs.e_wall, EAST_WALL))
+	if (!load_wall_texture(game, &game->txtrs.e_wall, game->settings->ea))
 		return (0);
-	if (!load_wall_texture(game, &game->txtrs.w_wall, WEST_WALL))
+	if (!load_wall_texture(game, &game->txtrs.w_wall, game->settings->we))
 		return (0);
 	return (1);
 }

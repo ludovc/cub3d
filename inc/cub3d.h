@@ -43,11 +43,6 @@
 # define M_PI 3.14159265358979323846
 # define M_PI_2 1.57079632679489661923
 
-# define NORTH_WALL "xpm/wall.xpm"
-# define SOUTH_WALL "xpm/wall.xpm"
-# define EAST_WALL "xpm/wall-dark.xpm"
-# define WEST_WALL "xpm/wall-dark.xpm"
-
 typedef struct s_player
 {
 	float	x;
