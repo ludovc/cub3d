@@ -167,7 +167,7 @@ void			initialization(t_game *game);
 void			init_ray(t_game *g, int x, t_ray *ray);
 
 // mlx_hook.c
-int				close_window(void);
+int				close_window(void *param);
 int				handle_keypress(int keycode, void *param);
 int				handle_keyrelease(int keycode, void *param);
 int				game_loop(void *param);
