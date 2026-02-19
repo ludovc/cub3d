@@ -38,8 +38,9 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
-	input_validation(argc, argv);
-	parsing(&game);
+	if (input_validation(argc, argv))
+		return (0);
+	parsing(&game, argv[1]);
 	initialization(&game);
 	load_textures(&game);
 	spawn_player(&game);
