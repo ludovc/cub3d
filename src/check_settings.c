@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_settings.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucasu <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: lucasu <lucasu@student.42firenze.it>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:46:24 by lucasu            #+#    #+#             */
-/*   Updated: 2026/02/16 16:46:26 by lucasu           ###   ########.fr       */
+/*   Updated: 2026/02/19 15:58:41 by lucasu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,18 @@
 
 int	is_file(char *str)
 {
-	if (open(str, O_RDONLY) == -1)
+	int		fd;
+
+	fd = open(str, O_RDONLY);
+	if (fd == -1)
+	{
 		return (0);
+	}
 	else
+	{
+		close(fd);
 		return (1);
+	}
 }
 
 int	count_char(char *str, char c)

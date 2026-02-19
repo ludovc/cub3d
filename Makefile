@@ -102,3 +102,9 @@ deps:
 	@$(MAKE) $(MLX) $(LIBFT)
 
 .PHONY: all clean fclean re info deps
+
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --verbose ./cub3D ./maps/scene1.cub
+
+val:
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes ./cub3D ./maps/scene1.cub
