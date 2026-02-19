@@ -6,7 +6,7 @@
 /*   By: lucasu <lucasu@student.42firenze.it>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:46:24 by lucasu            #+#    #+#             */
-/*   Updated: 2026/02/19 15:58:41 by lucasu           ###   ########.fr       */
+/*   Updated: 2026/02/19 16:45:24 by lucasu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,13 @@ int	is_rgb(char *str)
 
 int	check_settings(t_settings *settings)
 {
-	if (!is_file(settings->no))
+	if (!is_file(settings->no) || check_extension(settings->no, ".xpm"))
 		return (0);
-	if (!is_file(settings->so))
+	if (!is_file(settings->so) || check_extension(settings->so, ".xpm"))
 		return (0);
-	if (!is_file(settings->we))
+	if (!is_file(settings->we) || check_extension(settings->we, ".xpm"))
 		return (0);
-	if (!is_file(settings->ea))
+	if (!is_file(settings->ea) || check_extension(settings->ea, ".xpm"))
 		return (0);
 	if (!is_rgb(settings->f))
 		return (0);

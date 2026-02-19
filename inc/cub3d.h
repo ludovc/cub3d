@@ -6,7 +6,7 @@
 /*   By: mailinci <mailinci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:50:14 by mailinci          #+#    #+#             */
-/*   Updated: 2024/09/06 20:20:00 by mailinci         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:23:47 by lucasu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,5 +280,7 @@ int				is_wall(t_game *g, int mx, int my);
 
 int				load_textures(t_game *game);
 int				input_validation(int argc, char **argv);
+
+int 			check_extension(const char *str, const char *ext);
 
 #endif

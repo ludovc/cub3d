@@ -35,7 +35,8 @@ SRCS = 	src/check_settings.c \
 		src/strarr/strarr_append.c \
 		src/strarr/strarr_dup.c \
 		src/strarr/strarr_remove.c \
-		src/strarr/strarr_remove2.c
+		src/strarr/strarr_remove2.c \
+		src/check_extension.c \
 
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
