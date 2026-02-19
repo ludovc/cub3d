@@ -34,10 +34,11 @@ void	free_all(t_game *game)
 	free(game->mlx);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_game	game;
 
+	input_validation(argc, argv);
 	parsing(&game);
 	initialization(&game);
 	load_textures(&game);

@@ -12,6 +12,30 @@
 
 #include "../inc/cub3d.h"
 
+int	input_validation(int argc, char **argv)
+{
+    int	fd;
+
+    if (argc != 2)
+    {
+        ft_printf("Uso: ./cub3d <file.cub>\n");
+        return(1);
+    }
+    if (ft_strlen(argv[1]) < 5 || ft_strcmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub") != 0)
+    {
+        ft_printf("Errore: il file deve avere estensione .cub\n");
+        return(1);
+    }
+    fd = open(argv[1], O_RDONLY);
+    if (fd == -1)
+    {
+        ft_printf("Errore: file '%s' non trovato\n", argv[1]);
+        return(1);
+    }
+    close(fd);
+    return(0);
+}
+
 int	check_leftovers(char **settings)
 {
 	int		i;
@@ -39,13 +63,13 @@ void	exit_with_error(char *msg, char **settings, char **map, t_settings *s)
 	exit(1);
 }
 
-int	parsing(t_game *game)
+int	parsing(t_game *game, char *cub)
 {
 	char	**settings;
 	char	**map;
 	char	**file;
 
-	file = get_file("./maps/scene1.cub");
+	file = get_file(cub);
 	split_file(file, &settings, &map);
 	free_strarr(file);
 	game->settings = extract_settings(settings);

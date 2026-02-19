@@ -232,7 +232,7 @@ void			free_settings(t_settings *a);
 // check_settings.c
 int				check_settings(t_settings *settings);
 
-int				parsing(t_game *game);
+int				parsing(t_game *game, char *cub);
 
 // draw & normalize minimap
 void			ft_mlx_pixel_put(t_img *img, int x, int y, int color);
@@ -279,5 +279,6 @@ void			draw_borders(t_game *g, int cx, int cy);
 int				is_wall(t_game *g, int mx, int my);
 
 int				load_textures(t_game *game);
+int				input_validation(int argc, char **argv);
 
 #endif
