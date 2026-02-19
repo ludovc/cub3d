@@ -6,7 +6,7 @@
 /*   By: lucasu <lucasu@student.42firenze.it>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 15:43:53 by lucasu            #+#    #+#             */
-/*   Updated: 2026/02/19 16:50:13 by lucasu           ###   ########.fr       */
+/*   Updated: 2026/02/19 16:54:42 by lucasu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,26 @@
 
 int	input_validation(int argc, char **argv)
 {
-    int	fd;
+	int	fd;
 
-    if (argc != 2)
-    {
-        ft_printf("Uso: ./cub3d <file.cub>\n");
-        return(1);
-    }
-    if (check_extension(argv[1], ".cub"))
-    {
-        ft_printf("Errore: il file deve avere estensione .cub\n");
-        return(1);
-    }
-    fd = open(argv[1], O_RDONLY);
-    if (fd == -1)
-    {
-        ft_printf("Errore: file '%s' non trovato\n", argv[1]);
-        return(1);
-    }
-    close(fd);
-    return(0);
+	if (argc != 2)
+	{
+		ft_printf("Uso: ./cub3d <file.cub>\n");
+		return (1);
+	}
+	if (check_extension(argv[1], ".cub"))
+	{
+		ft_printf("Errore: il file deve avere estensione .cub\n");
+		return (1);
+	}
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+	{
+		ft_printf("Errore: file '%s' non trovato\n", argv[1]);
+		return (1);
+	}
+	close(fd);
+	return (0);
 }
 
 int	check_leftovers(char **settings)

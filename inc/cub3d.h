@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mailinci <mailinci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucasu <lucasu@student.42firenze.it>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:50:14 by mailinci          #+#    #+#             */
-/*   Updated: 2026/02/19 16:23:47 by lucasu           ###   ########.fr       */
+/*   Updated: 2026/02/19 16:53:24 by lucasu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,6 @@ int				is_wall(t_game *g, int mx, int my);
 int				load_textures(t_game *game);
 int				input_validation(int argc, char **argv);
 
-int 			check_extension(const char *str, const char *ext);
+int				check_extension(const char *str, const char *ext);
 
 #endif
