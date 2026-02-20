@@ -17,7 +17,6 @@ int	check_extension(const char *str, const char *ext)
 	int		ls;
 	int		le;
 
-	printf("Controllo estensione di '%s' contro '%s'\n", str, ext);
 	if (!str || !ext)
 		return (1);
 	ls = ft_strlen(str);
