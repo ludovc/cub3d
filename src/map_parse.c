@@ -76,12 +76,12 @@ static int	validate_map_closed(char **map)
 	int		row_len;
 	char	c;
 
-	y = 0;
-	while (map && map[y])
+	y = -1;
+	while (map && map[++y])
 	{
 		row_len = ft_strlen(map[y]);
-		x = 0;
-		while (x < row_len)
+		x = -1;
+		while (++x < row_len)
 		{
 			c = map[y][x];
 			if (c == '0' || is_spawn(c))
@@ -93,9 +93,7 @@ static int	validate_map_closed(char **map)
 					return (1);
 				}
 			}
-			x++;
 		}
-		y++;
 	}
 	return (0);
 }
